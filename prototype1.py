@@ -65,5 +65,8 @@ def validate_pmcmd():
 	print check_command_exists("pmrep -version")
 	print check_command_exists("pmrepx -version")
 
+	print "Janis test"
+
 
 validate_pmcmd()
+
