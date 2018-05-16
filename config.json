@@ -1,0 +1,20 @@
+{
+  "connections": {
+    "EBS_UAT": {
+      "repository": "BIDW_UAT_EBS_961",
+      "domain": "Domain_ukblufsdac01_961",
+      "login_name": "Administrator",
+      "password": "A6ministrator"
+    }
+  },
+
+  "folder_mappings" : {
+    "default" : [
+      ["BIDW_CUSTOM_SILOS", "Janis_BIDW_CUSTOM_SILOS"],
+      ["test", "Janis_test"]
+    ]
+  }
+
+
+
+}
