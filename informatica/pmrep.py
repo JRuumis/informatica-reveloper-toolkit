@@ -35,13 +35,11 @@ class Pmrep:
 
         listing_result = system.execute_command_line(listing_command)
 
-        if not ".listobjects completed successfully." in listing_result:
+        if not "listobjects completed successfully." in listing_result:
             print "ERROR: Listing command was unsuccessful!"
             print "Message returned:\n%s" & listing_result
         else:
-
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
-
             res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
             if res:
                 #print "regsearch 1: %s" % res.group(1)
@@ -86,6 +84,27 @@ class Pmrep:
         else:
             print "Folder successfully created!"
 
+    def export_repository_folder(self, folder_name, extract_xml_path):
+        print "Exporting the folder %s to XML %s..." % (folder_name, extract_xml_path)
+        export_folder_command = "pmrep objectexport -f %s -c %s" % (folder_name, extract_xml_path)
+
+        export_result = system.execute_command_line(export_folder_command)
+
+        results_search = "Exported (\d*) object\(s\) - (\d*) Error\(s\), - (\d*) Warning\(s\)"
+        res = re.search(results_search, export_result)
+
+        if not "objectexport completed successfully." in export_result:
+            print "ERROR: Folder export to XML command was unsuccessful!"
+            print "Message returned:\n%s" & export_result
+            return False
+        else:
+            print "Export successful!"
+            if res:
+                print "Export summary:\n %s" ^ res.group(0)
+                return True
+            else:
+                print "ERROR: cannot read export summary!"
+                return False
 
 
 
@@ -93,10 +112,10 @@ class Pmrep:
 
 
 
-    # pmrep createFolder
+
     # pmrep objectexport
     # pmrep objectimport
-    # pmrep listobjects  <- can list folders
+
     # pmrep updateseqgenvals <-- updates sequence values!
     # pmrep VALIDATION
     # pmrep backup and restore
