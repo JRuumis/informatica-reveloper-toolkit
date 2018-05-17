@@ -42,7 +42,7 @@ class Pmrep:
 
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
 
-            res = re.search('results_search', listing_result, re.MULTILINE|re.DOTALL)
+            res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
             if res:
                 print "regsearch 0: %s" % res.group(0)
                 print "regsearch 1: %s" % res.group(1)
