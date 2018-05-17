@@ -27,5 +27,10 @@ mpg = infa_connection.get_folder_mappings("SILOS")
 print mpg
 
 
+resss = infa_connection.create_repository_folder("JANIS_from_PMREP_test1")
+if not ress:
+    print "Error creating folder!!!"
+
+
 
 

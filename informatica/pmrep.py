@@ -36,7 +36,7 @@ class Pmrep:
         listing_result = system.execute_command_line(listing_command)
 
         if not ".listobjects completed successfully." in listing_result:
-            print "ERROR: Listing command %s was unsuccessful!"
+            print "ERROR: Listing command was unsuccessful!"
             print "Message returned:\n%s" & listing_result
         else:
 
@@ -70,6 +70,22 @@ class Pmrep:
 
     def get_folder_targets(self, folder_name):
         return self.get_objects_list("target", folder=folder_name)
+
+    def create_repository_folder(self, folder_name, shared=True):
+        print "Creating a new folder %s..." % folder_name
+        if shared: shared_flag = "-s"
+        else: shared_flag = ""
+        create_folder_command = "pmrep createfolder -n %s %s" % (folder_name, shared_flag)
+
+        create_result = system.execute_command_line(create_folder_command)
+
+        if not "createfolder completed successfully." in create_result:
+            print "ERROR: Listing command was unsuccessful!"
+            print "Message returned:\n%s" & create_result
+            return False
+        else:
+            print "Folder successfully created!"
+
 
 
 
