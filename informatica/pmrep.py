@@ -44,10 +44,14 @@ class Pmrep:
 
             res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
             if res:
-                print "regsearch 0: %s" % res.group(0)
-                print "regsearch 1: %s" % res.group(1)
+                #print "regsearch 1: %s" % res.group(1)
+                objects_list = res.group(1).splitlines()
+                objects_list_cleaned = [o.strip() for o in objects_list if len(o) > 0]
+
+                return objects_list_cleaned  # TODO: add column split
             else:
-                print "res appears to be empty: %s" % str(res)
+                print "listobjects parse result appears to be empty: %s" % str(res)
+                return List()
 
 
 
