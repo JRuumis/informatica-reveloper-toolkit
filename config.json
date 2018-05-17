@@ -9,10 +9,19 @@
   },
 
   "folder_mappings" : {
-    "default" : [
-      ["BIDW_CUSTOM_SILOS", "Janis_BIDW_CUSTOM_SILOS"],
-      ["test", "Janis_test"]
-    ]
+    "mapping1" : {
+      "source": "BIDW_CUSTOM_SILOS",
+      "target": "Janis_BIDW_CUSTOM_SILOS"
+    },
+
+    "mapping2": {
+      "source": "test",
+      "target": "Janis_test"
+    }
+  },
+
+  "git": {
+    "url": "bitbucket....."
   }
 
 
