@@ -23,7 +23,7 @@ class Pmrep:
             print "Connect returned message: %s" % connect_result
             return False
 
-    def get_objects_list(self, object_type, folder=Nil):
+    def get_objects_list(self, object_type, folder=None):
 
         listing_command_head = "pmrep listobjects -o %s" % object_type
         if folder:
