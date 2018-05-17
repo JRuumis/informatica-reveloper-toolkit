@@ -53,6 +53,26 @@ class Pmrep:
                 print "listobjects parse result appears to be empty: %s" % str(res)
                 return List()
 
+    def get_repository_folders(self):
+        return self.get_objects_list("folder")
+
+    def get_folder_workflows(self, folder_name):
+        return self.get_objects_list("workflow", folder=folder_name)
+
+    def get_folder_mappings(self, folder_name):
+        return self.get_objects_list("mapping", folder=folder_name)
+
+    def get_folder_sessions(self, folder_name):
+        return self.get_objects_list("session", folder=folder_name)
+
+    def get_folder_sources(self, folder_name):
+        return self.get_objects_list("source", folder=folder_name)
+
+    def get_folder_targets(self, folder_name):
+        return self.get_objects_list("target", folder=folder_name)
+
+
+
 
 
 
