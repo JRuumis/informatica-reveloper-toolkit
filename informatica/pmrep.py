@@ -1,10 +1,10 @@
 from informatica import system
+import re
+
 
 class Pmrep:
     def __init__(self, connection):
         self.connection = connection
-
-
 
     def connect(self):
 
@@ -23,9 +23,34 @@ class Pmrep:
             print "Connect returned message: %s" % connect_result
             return False
 
+    def get_objects_list(self, object_type, folder=Nil):
+
+        listing_command_head = "pmrep listobjects -o %s" % object_type
+        if folder:
+            additional_folder = " -f %s" % folder
+        else:
+            additional_folder = ""
+
+        listing_command = listing_command_head + additional_folder
+
+        listing_result = system.execute_command_line(listing_command)
+
+        if not ".listobjects completed successfully." in listing_result:
+            print "ERROR: Listing command %s was unsuccessful!"
+            print "Message returned:\n%s" & listing_result
+        else:
+
+            results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
+
+            res = re.search('results_search', listing_result)
+
+            print "regsearch 0: %s" % res.group(0)
+            print "regsearch 1: %s" % res.group(1)
 
 
-    # pmrep connect
+
+
+
     # pmrep createFolder
     # pmrep objectexport
     # pmrep objectimport
