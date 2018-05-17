@@ -80,7 +80,7 @@ class Pmrep:
         create_result = system.execute_command_line(create_folder_command)
 
         if not "createfolder completed successfully." in create_result:
-            print "ERROR: Listing command was unsuccessful!"
+            print "ERROR: Create folder command was unsuccessful!"
             print "Message returned:\n%s" & create_result
             return False
         else:
