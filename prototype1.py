@@ -23,29 +23,29 @@ from subprocess import call, Popen, PIPE, STDOUT, check_output  # Used to execut
 import os
 
 def execute_command_line(cmd):
-	if platform.system() == 'Linux':
-		command_pipe = Popen("%s" % cmd, stdout=PIPE, stderr=PIPE, shell=True)
-		command_return, command_err = command_pipe.communicate()
-		return command_return + command_err
-	else:
-		return "ERROR: not working for Windows yet"
+    if platform.system() == 'Linux':
+        command_pipe = Popen("%s" % cmd, stdout=PIPE, stderr=PIPE, shell=True)
+        command_return, command_err = command_pipe.communicate()
+        return command_return + command_err
+    else:
+        return "ERROR: not working for Windows yet"
 
 def check_command_exists(cmd):
-	exec_result = execute_command_line(cmd)
-	if exec_result.strip()[-17:] == 'command not found':
-		return False
-	else:
-		return True
+    exec_result = execute_command_line(cmd)
+    if exec_result.strip()[-17:] == 'command not found':
+        return False
+    else:
+        return True
 
 
 
 def is_environment_variable_defined(variable_name): return variable_name in os.environ
 
 def get_environment_variable(variable_name):
-	if is_environment_variable_defined(variable_name):
-		return 'Environment variable %s has the value [%s]' % (variable_name, os.environ[variable_name])
-	else:
-		return 'ERROR: environment variable %s is not defined!' % variable_name
+    if is_environment_variable_defined(variable_name):
+        return 'Environment variable %s has the value [%s]' % (variable_name, os.environ[variable_name])
+    else:
+        return 'ERROR: environment variable %s is not defined!' % variable_name
 
 
 
@@ -53,19 +53,19 @@ def get_environment_variable(variable_name):
 def validate_pmcmd():
 
 
-	print get_environment_variable('INFA_HOME')
-	print get_environment_variable('INFA_DOMAINS_FILE')
-	print get_environment_variable('JANIS_VAR')
-	print get_environment_variable('LD_LIBRARY_PATH')
-	print get_environment_variable('PATH')
+    print get_environment_variable('INFA_HOME')
+    print get_environment_variable('INFA_DOMAINS_FILE')
+    print get_environment_variable('JANIS_VAR')
+    print get_environment_variable('LD_LIBRARY_PATH')
+    print get_environment_variable('PATH')
 
-	print "checking pmrep..."
-	print execute_command_line("pmrep -version")
+    print "checking pmrep..."
+    print execute_command_line("pmrep -version")
 
-	print check_command_exists("pmrep -version")
-	print check_command_exists("pmrepx -version")
+    print check_command_exists("pmrep -version")
+    print check_command_exists("pmrepx -version")
 
-	print "Janis test"
+    print "Janis test"
 
 
 validate_pmcmd()
