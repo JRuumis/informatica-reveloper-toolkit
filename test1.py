@@ -39,7 +39,7 @@ def check_command_exists(cmd):
 
 
 
-def is_environment_variable_defined(variable_name): return variable_name in os.environ
+def is_environment_variable_defined(variable_name): return variable_name in os.environ xxx
 
 def get_environment_variable(variable_name):
     if is_environment_variable_defined(variable_name):
@@ -65,7 +65,6 @@ def validate_pmcmd():
     print check_command_exists("pmrep -version")
     print check_command_exists("pmrepx -version")
 
-    print "Janis test"
 
 
 validate_pmcmd()
