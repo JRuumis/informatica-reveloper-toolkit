@@ -13,6 +13,7 @@ class FromJSON:
         except Exception, err:
             print "Error getting configuration from JSON: %s" % err
             print "Make sure the file 'condif.json' exists in the current folder or provide full path to the JSON file."
+            exit(1)
 
         # TODO: validate the JSON content
 
