@@ -119,7 +119,7 @@ class Pmrep:
 
     def import_repository_folder(self, import_xml_file_path):
 
-        print "Importing an informatica folder from an XML file..."
+        print "\n\nImporting an informatica folder from an XML file..."
         print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
         print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
         print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
@@ -136,7 +136,6 @@ class Pmrep:
             source_repository_name = res.group(1)
             source_folder_name = res.group(2)
             print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s" % (source_repository_name, source_folder_name)
-            return True
         else:
             print "ERROR: XML file name parsing failed!\nPlease note the file name is case-sensitive.\n" \
                   "The required XML import file name should follow this format: Folder___<source repository name>___<informatica source folder name).xml\nExample: Folder___UAT_REPO___SIL_Order_Lines.xml"
@@ -199,7 +198,7 @@ class Pmrep:
                 print "ERROR: cannot read export summary!"
                 return False
 
-
+        return True
 
 
 
