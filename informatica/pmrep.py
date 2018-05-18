@@ -168,7 +168,7 @@ class Pmrep:
 
         for key in control_replacements.keys():
             print "key: %s, replacement: %s" % (key, control_replacements[key])
-            cmd_file_content.replace(key, control_replacements[key])
+            cmd_file_content = cmd_file_content.replace(key, control_replacements[key])
 
         system.write_file("import_control_current.ctl", cmd_file_content)
 
