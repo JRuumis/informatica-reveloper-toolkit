@@ -20,7 +20,7 @@ class Pmrep:
             return True
         else:
             print "ERROR: Connect to pmrep failed!"
-            print "Connect returned message: %s" % connect_result
+            print "Message returned:\n=========================%s\n=========================\n" % connect_result
             return False
 
     def get_objects_list(self, object_type, folder=None):
@@ -37,12 +37,11 @@ class Pmrep:
 
         if not "listobjects completed successfully." in listing_result:
             print "ERROR: Listing command was unsuccessful!"
-            print "Message returned:\n%s" % listing_result
+            print "Message returned:\n=========================%s\n=========================\n" % listing_result
         else:
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
             res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
             if res:
-                #print "regsearch 1: %s" % res.group(1)
                 objects_list = res.group(1).splitlines()
                 objects_list_cleaned = [o.strip() for o in objects_list if len(o) > 0]
 
@@ -79,7 +78,7 @@ class Pmrep:
 
         if not "createfolder completed successfully." in create_result:
             print "ERROR: Create folder command was unsuccessful!"
-            print "Message returned:\n%s" % create_result
+            print "Message returned:\n=========================%s\n=========================\n" % create_result
             return False
         else:
             print "Folder successfully created!"
@@ -95,12 +94,13 @@ class Pmrep:
 
         if not "objectexport completed successfully." in export_result:
             print "ERROR: Folder export to XML command was unsuccessful!"
-            print "Message returned:\n%s" % export_result
+            print "Export command used: [%s]" % export_folder_command
+            print "Message returned:\n=========================%s\n=========================\n" % export_result
             return False
         else:
             print "Export successful!"
             if res:
-                print "Export summary:\n %s" ^ res.group(0)
+                print "Export summary:\n %s" % res.group(0)
                 return True
             else:
                 print "ERROR: cannot read export summary!"
