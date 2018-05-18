@@ -184,7 +184,7 @@ class Pmrep:
         results_search = "(\d*) Processed, (\d*) Errors, (\d*) Warnings"
         res = re.search(results_search, import_result)
 
-        if not "objectimport completed successfully." in export_result:
+        if not "objectimport completed successfully." in import_result:
             print "ERROR: Folder import command was unsuccessful!"
             print "Import command used: [%s]" % import_folder_command
             print "Message returned:\n=========================%s\n=========================\n" % import_result
