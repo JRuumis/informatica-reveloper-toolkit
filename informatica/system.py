@@ -29,3 +29,20 @@ def get_environment_variable(variable_name):
     else:
         print 'ERROR: environment variable %s is not defined!' % variable_name
         return False
+
+def read_file(path_to_file):
+    with open(path_to_file, 'r') as f:
+        read_data = f.read()
+    return read_data
+
+def write_file(path_to_file, content, rewrite=True):
+
+    if not rewrite and os.path.isfile(path_to_file):
+        print "ERROR: File % already exists!" % path_to_file
+        return False
+
+    with open(path_to_file, "w") as f:
+        f.write(content)
+
+    return True
+
