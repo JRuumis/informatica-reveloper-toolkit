@@ -85,7 +85,7 @@ class Pmrep:
 
     def export_repository_folder(self, folder_name, extract_xml_path):
         print "Exporting the folder %s to XML %s..." % (folder_name, extract_xml_path)
-        export_folder_command = "pmrep objectexport -f %s -c %s" % (folder_name, extract_xml_path)
+        export_folder_command = "pmrep objectexport -f %s -u %s" % (folder_name, extract_xml_path)
 
         export_result = system.execute_command_line(export_folder_command)
 
