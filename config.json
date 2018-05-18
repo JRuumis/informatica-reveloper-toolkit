@@ -1,10 +1,10 @@
 {
   "connections": {
     "EBS_UAT": {
-      "repository": "BIDW_UAT_EBS_961",
-      "domain": "Domain_ukblufsdac01_961",
+      "repository": "XXX",
+      "domain": "Domain_XXX",
       "login_name": "Administrator",
-      "password": "A6ministrator"
+      "password": "password"
     }
   },
 

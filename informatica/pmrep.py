@@ -37,7 +37,7 @@ class Pmrep:
 
         if not "listobjects completed successfully." in listing_result:
             print "ERROR: Listing command was unsuccessful!"
-            print "Message returned:\n%s" & listing_result
+            print "Message returned:\n%s" % listing_result
         else:
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
             res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
@@ -95,7 +95,7 @@ class Pmrep:
 
         if not "objectexport completed successfully." in export_result:
             print "ERROR: Folder export to XML command was unsuccessful!"
-            print "Message returned:\n%s" & export_result
+            print "Message returned:\n%s" % export_result
             return False
         else:
             print "Export successful!"
