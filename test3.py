@@ -32,7 +32,10 @@ resss = infa_connection.create_repository_folder("JANIS_from_PMREP_test2")
 #    print "Error creating folder!!!"
 
 
-ffff = infa_connection.export_repository_folder("BIDW_CUSTOM_SILOS","")
+ffff = infa_connection.export_repository_folder("Janis_BIDW_CUSTOM_SILOS","")
+
+
+gggg = infa_connection.import_repository_folder("Folder___BIDW_UAT_EBS_961___Janis_BIDW_CUSTOM_SILOS.xml")
 
 #
 

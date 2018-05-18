@@ -88,10 +88,10 @@ class Pmrep:
 
 
     def export_repository_folder(self, informatica_folder_name, extract_xml_folder_path):
-        xml_export_file_name = "Folder__%s__%s.xml" % (self.connection["repository"], informatica_folder_name)
+        xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
         print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, extract_xml_folder_path)
         print "Export file name: %s" % xml_export_file_name
-        print "Export file name format: Folder__<source repository name>__<informatica source folder name).xml"
+        print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
         extract_xml_path = os.path.join(extract_xml_folder_path, xml_export_file_name)
 
@@ -122,7 +122,7 @@ class Pmrep:
         print "Importing an informatica folder from an XML file..."
         print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
         print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
-        print "INFO: Export file name format: Folder__<source repository name>__<informatica source folder name).xml"
+        print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
 
         # validations and preparations
@@ -130,7 +130,7 @@ class Pmrep:
             print "ERROR: Cannot find the XML import file [%s]" % import_xml_file_path
             return False
 
-        folder_name_parse = "Folder__(.+)__(.+)\."
+        folder_name_parse = "Folder___(.+)___(.+)\."
         res = re.search(folder_name_parse, import_xml_file_path)
         if res:
             source_repository_name = res.group(1)
@@ -139,7 +139,7 @@ class Pmrep:
             return True
         else:
             print "ERROR: XML file name parsing failed!\nPlease note the file name is case-sensitive.\n" \
-                  "The required XML import file name should follow this format: Folder__<source repository name>__<informatica source folder name).xml\nExample: Folder__UAT_REPO__SIL_Order_Lines.xml"
+                  "The required XML import file name should follow this format: Folder___<source repository name>___<informatica source folder name).xml\nExample: Folder___UAT_REPO___SIL_Order_Lines.xml"
             return False
 
         imp_control_definition_path = os.path.join(system.get_environment_variable("INFA_HOME"), "server", "bin", "impcntl.dtd")
