@@ -34,7 +34,7 @@ resss = infa_connection.create_repository_folder("JANIS_from_PMREP_test2")
 
 ffff = infa_connection.export_repository_folder("BIDW_CUSTOM_SILOS","Auto_export_BIDW_CUSTOM_SILOS.xml")
 
-
+#
 
 
 
