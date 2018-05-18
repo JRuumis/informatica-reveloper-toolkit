@@ -166,7 +166,7 @@ class Pmrep:
             "{{TARGET_REPOSITORY}}" : target_repository_name
         }
 
-        for replacement in control_replacements.keys:
+        for key in control_replacements.keys():
             cmd_file_content.replace(key, control_replacements[key])
 
         system.write_file("import_control_current.ctl", cmd_file_content)
