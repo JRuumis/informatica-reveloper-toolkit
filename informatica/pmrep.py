@@ -79,7 +79,7 @@ class Pmrep:
 
         if not "createfolder completed successfully." in create_result:
             print "ERROR: Create folder command was unsuccessful!"
-            print "Message returned:\n%s" & create_result
+            print "Message returned:\n%s" % create_result
             return False
         else:
             print "Folder successfully created!"
