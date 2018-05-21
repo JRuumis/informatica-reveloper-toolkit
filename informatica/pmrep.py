@@ -294,9 +294,10 @@ class Pmrep:
             print "ERROR: temp folder does not exist. Please create one under the current folder."
             return False
 
-        xml_archives_in_temp_folder = [f for f in os.listdir(temp_folder_path) if os.path.isfile(os.path.join(archive_folder_name, f)) and f.upper().endswith('.XML')]
+        xml_archives_in_temp_folder = [f for f in os.listdir(temp_folder_path) if os.path.isfile(os.path.join(temp_folder_path, f)) and f.upper().endswith('.XML')]
         for archive in xml_archives_in_temp_folder:
             os.remove(os.path.join(temp_folder_path,archive))
+        print "Removed %s xml files from temp." % len(xml_archives_in_temp_folder)
         print "temp folder cleanup done.\n"
 
 
