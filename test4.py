@@ -9,7 +9,7 @@ validation_result = validation.system_validation()
 if not validation_result: exit (1)
 
 
-infa_connection = pmrep.Pmrep(config.content["connections"]["EBS_UAT"])
+infa_connection = pmrep.Pmrep(config.content)
 infa_connection.connect()
 
 #ress = infa_connection.get_objects_list(object_type="folder")
@@ -35,7 +35,7 @@ infa_connection.connect()
 
 
 # todo: import output to log - DONE
-# todo: export to log
+# todo: export to log - DONE
 # todo: folder to migrate - auto
 # todo: infa test exports folder - also in config
 # todo: git
@@ -46,11 +46,17 @@ infa_connection.connect()
     # create folder
     # delete folder
 
+#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_GDD', 'Janis_BIDW_CUSTOM_GDD')
+#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_PLP', 'Janis_BIDW_CUSTOM_PLP')
+#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_SDE_ORA12', 'Janis_BIDW_CUSTOM_SDE_ORA12')
+
 #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
 #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
 
-#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_GDD', 'Janis_BIDW_CUSTOM_GDD')
-infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_PLP', 'Janis_BIDW_CUSTOM_PLP')
-#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_SDE_ORA12', 'Janis_BIDW_CUSTOM_SDE_ORA12')
+
+export_outcome = infa_connection.export()
+import_outcome = infa_connection.import()
+
+
 
 
