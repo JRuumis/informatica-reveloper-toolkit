@@ -93,6 +93,7 @@ class Pmrep:
         print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
         if not os.path.isdir(export_xml_folder_path):
             print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
+            return False
         print "Export file name: %s" % xml_export_file_name
         print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
