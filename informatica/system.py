@@ -46,3 +46,13 @@ def write_file(path_to_file, content, rewrite=True):
 
     return True
 
+def write_log(log_name, log_content):
+
+    log_folder = os.path.join('.','logs')
+
+    if not os.path.isdir(log_folder):
+        print 'ERROR: Cannot write log. Log folder %s does not exist.' % log_folder
+
+    lof_file_path = os.path.join(log_folder, log_name)
+
+    write_file(lof_file_path, log_content, rewrite=True)
