@@ -282,6 +282,7 @@ class Pmrep:
     def duplicate_rename_informatica_folder(self, informatica_source_folder_name, informatica_target_folder_name):
 
         print "----------------------------------------------------------------------------------"
+        print "----------------------------------------------------------------------------------"
         print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s\n' % (informatica_source_folder_name, informatica_target_folder_name)
         if informatica_source_folder_name == informatica_target_folder_name:
             print "ERROR: source and target folders are the same."
