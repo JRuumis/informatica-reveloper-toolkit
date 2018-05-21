@@ -244,16 +244,16 @@ class Pmrep:
             print "ERROR: Folder %s does not exist!" % archive_folder_name
             return False
 
-        archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper().endswith('.XML')]
+        xml_archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper().endswith('.XML')]
 
-        if len(archives_in_folder) == 0:
+        if len(xml_archives_in_folder) == 0:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
 
-        for archive_xml in archives_in_folder:
-            import_result = self.import_repository_folder(archive_xml)
+        for xml_archive_file_name in xml_archives_in_folder:
+            import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name))
 
             if import_result and delete_archive_after_successful_import:
-                os.remove(archive_xml)
+                os.remove(xml_archive_file_name)
 
         print "All imports from the folder %s done." % archive_folder_name
 

@@ -31,8 +31,8 @@ infa_connection.connect()
 #    print "Error creating folder!!!"
 
 
-export_outcome = infa_connection.export_repository_folders(config.content["folders_to_migrate"], "/home/c51102a/InfaTest/infa-exports")
-import_outcome = infa_connection.import_all_xmls_from_folder("/home/c51102a/InfaTest/infa-exports")
+export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '~/InfaTest/exports')
+import_outcome = infa_connection.import_all_xmls_from_folder('~/InfaTest/exports', True)
 
 #export_outcome = infa_connection.export_repository_folder("Janis_BIDW_CUSTOM_SILOS", "")
 #import_outcome = infa_connection.import_repository_folder("Folder___BIDW_UAT_EBS_961___Janis_BIDW_CUSTOM_SILOS.xml")
