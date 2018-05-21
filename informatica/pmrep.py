@@ -335,10 +335,10 @@ class Pmrep:
     #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
     #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
 
-    def export(self):
+    def export_control(self):
         return self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
 
-    def import(self):
+    def import_control(self):
         return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)
 
 
