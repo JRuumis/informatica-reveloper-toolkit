@@ -5,7 +5,9 @@ import os
 
 class Pmrep:
     def __init__(self, connection):
-        self.connection = connection
+        self.connection = connection["connections"]["EBS_UAT"] # TODO: nooooooooooooooooooooooooooooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.xml_export_folder = connection["xml_export_folder"]
+        self.folders_to_migrate = connection["folders_to_migrate"]
 
     def connect(self):
 
@@ -330,11 +332,16 @@ class Pmrep:
 
         return False
 
+    #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
+    #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
+
+    def export(self):
+        return self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
+
+    def import(self):
+        return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)
 
 
-
-
-    # TODO: export an import a folder but import with a different name
 
 
 

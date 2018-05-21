@@ -58,4 +58,4 @@ def write_log(log_name, log_content, echo=True):
     write_file(lof_file_path, log_content, rewrite=True)
 
     if echo:
-        print 'Log file writtenL %s' % lof_file_path
+        print 'Log file written: %s' % lof_file_path
