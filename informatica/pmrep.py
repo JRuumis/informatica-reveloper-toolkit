@@ -128,7 +128,7 @@ class Pmrep:
         return True
 
 
-    def import_repository_folder(self, import_xml_file_path, target_folder_name_override=None, create_target_folder_if_not_exist=True):
+    def import_repository_folder(self, import_xml_file_path, target_informatica_folder_name_override=None, create_target_folder_if_not_exist=True, delete_archive_after_successful_import=False):
 
         print "----------------------------------------------------------------------------------"
         print "Importing an informatica folder from an XML file..."
@@ -145,8 +145,8 @@ class Pmrep:
         res = re.search(folder_name_parse, import_xml_file_path)
         if res:
             source_repository_name = res.group(1)
-            source_folder_name = res.group(2)
-            print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s" % (source_repository_name, source_folder_name)
+            source_informatica_folder_name = res.group(2)
+            print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s" % (source_repository_name, source_informatica_folder_name)
         else:
             print "ERROR: XML file name parsing failed!\nPlease note the file name is case-sensitive.\n" \
                   "The required XML import file name should follow this format: Folder___<source repository name>___<informatica source folder name).xml\nExample: Folder___UAT_REPO___SIL_Order_Lines.xml"
@@ -162,24 +162,24 @@ class Pmrep:
             return False
 
         target_repository_name = self.connection["repository"]
-        if target_folder_name_override:
-            target_folder_name = target_folder_name_override
+        if target_informatica_folder_name_override:
+            target_informatica_folder_name = target_informatica_folder_name_override
         else:
-            target_folder_name = source_folder_name
+            target_informatica_folder_name = source_informatica_folder_name
 
 
         # create target folder if it does not exist already
         existing_folders = self.get_repository_folders()
 
-        if target_folder_name in existing_folders:
-            print "The target Informatica folder %s already exists in the repository." % target_folder_name
+        if target_informatica_folder_name in existing_folders:
+            print "The target Informatica folder %s already exists in the repository." % target_informatica_folder_name
         else:
-            print "The target Informatica folder %s does not exist in the repository." % target_folder_name
+            print "The target Informatica folder %s does not exist in the repository." % target_informatica_folder_name
             if not create_target_folder_if_not_exist:
                 print "ERROR: create_target_folder_if_not_exist parameter is set to False. The folder will not be created. Exiting..."
                 return False
             else:
-                self.create_repository_folder(target_folder_name)
+                self.create_repository_folder(target_informatica_folder_name)
 
 
         # write control file
@@ -195,9 +195,9 @@ class Pmrep:
 
         ctl_replacements = {
             "{{IMPCNTL_DTD}}": impcntl_dtd_path,
-            "{{SOURCE_FOLDER}}": source_folder_name,
+            "{{SOURCE_FOLDER}}": source_informatica_folder_name,
             "{{SOURCE_REPOSITORY}}": source_repository_name,
-            "{{TARGET_FOLDER}}": target_folder_name,
+            "{{TARGET_FOLDER}}": target_informatica_folder_name,
             "{{TARGET_REPOSITORY}}": target_repository_name
         }
 
@@ -227,11 +227,15 @@ class Pmrep:
             print "Import successful!\n"
             if res:
                 print "Import summary:\n %s" % res.group(0)
-                return True
             else:
                 print "ERROR: cannot read import summary! Please analyse the detailed message below:"
                 print "Message returned:\n=========================%s\n=========================\n" % import_result
                 return False
+
+        if delete_archive_after_successful_import:
+            print "Deleting the archive file %s after a successful import..." % import_xml_file_path
+            os.remove(import_xml_file_path)
+            print "Delete successful.\n"
 
         return True
 
@@ -251,24 +255,42 @@ class Pmrep:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
 
         for xml_archive_file_name in xml_archives_in_folder:
-            import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name))
+            import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name, delete_archive_after_successful_import))
 
-            if import_result and delete_archive_after_successful_import:
-                os.remove(xml_archive_file_name)
-
-        print "All imports from the folder %s done." % archive_folder_name
-
+        print "All imports from the folder %s done.\n" % archive_folder_name
         return True
 
 
     def duplicate_rename_informatica_folder(self, informatica_source_folder_name, informatica_target_folder_name):
 
-        print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s' % (informatica_source_folder_name, informatica_target_folder_name)
+        print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s\n' % (informatica_source_folder_name, informatica_target_folder_name)
         if informatica_source_folder_name == informatica_target_folder_name:
-            print "ERROR: source and target folders are the same"
+            print "ERROR: source and target folders are the same."
 
 
-        self.export_repository_folder()
+        # cleanup the temp folder
+        print "Removing all xml archives from the temp folder..."
+        temp_folder_path = os.path.join(".", 'temp')
+
+        if not os.path.isdir(temp_folder_path):
+            print "ERROR: temp folder does not exist. Please create one under the current folder."
+            return False
+
+        xml_archives_in_temp_folder = [f for f in os.listdir(temp_folder_path) if os.path.isfile(os.path.join(archive_folder_name, f)) and f.upper().endswith('.XML')]
+        for archive in xml_archives_in_temp_folder:
+            os.remove(os.path.join(temp_folder_path,archive))
+        print "temp folder cleanup done.\n"
+
+
+        export_result = self.export_repository_folder(informatica_source_folder_name, '.')
+
+        if export_result:
+            import_result = self.import_repository_folder('.',target_informatica_folder_name_override=informatica_target_folder_name, delete_archive_after_successful_import=True)
+            return True
+
+        return False
+
+
 
 
 
