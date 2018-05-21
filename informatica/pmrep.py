@@ -257,7 +257,8 @@ class Pmrep:
             return False
 
         for xml_archive_file_name in xml_archives_in_folder:
-            import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name, delete_archive_after_successful_import))
+            #import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name, delete_archive_after_successful_import))
+            self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name))
 
         print "All imports from the folder %s done.\n" % archive_folder_name
         return True
