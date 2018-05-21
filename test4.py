@@ -34,6 +34,7 @@ infa_connection.connect()
 #import_outcome = infa_connection.import_repository_folder("Folder___BIDW_UAT_EBS_961___Janis_BIDW_CUSTOM_SILOS.xml")
 
 
+# todo: import output to log
 # todo: folder to migrate - auto
 # todo: infa test exports folder - also in config
 # todo: git

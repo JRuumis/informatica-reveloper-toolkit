@@ -171,6 +171,7 @@ class Pmrep:
         target_repository_name = self.connection["repository"]
         if target_informatica_folder_name_override:
             target_informatica_folder_name = target_informatica_folder_name_override
+            print "Target Informatica folder name overridde: %s" % target_informatica_folder_name
         else:
             target_informatica_folder_name = source_informatica_folder_name
 
@@ -221,6 +222,9 @@ class Pmrep:
         import_folder_command = "pmrep objectimport -i %s -c %s" % (import_xml_file_path, "import_control_current.ctl")
 
         import_result = system.execute_command_line(import_folder_command)
+
+        log_file_name = os.path.basename(import_xml_file_path) + '.log'
+        system.write_log(log_file_name, import_result)
 
         results_search = "(\d*) Processed, (\d*) Errors, (\d*) Warnings"
         res = re.search(results_search, import_result)
@@ -299,7 +303,8 @@ class Pmrep:
         xml_archives_in_temp_folder = [f for f in os.listdir(temp_folder_path) if os.path.isfile(os.path.join(temp_folder_path, f)) and f.upper().endswith('.XML')]
         for archive in xml_archives_in_temp_folder:
             os.remove(os.path.join(temp_folder_path,archive))
-        print "Removed %s xml files from temp." % len(xml_archives_in_temp_folder)
+        if len(xml_archives_in_temp_folder):
+            print "Removed %s xml files from temp." % len(xml_archives_in_temp_folder)
         print "temp folder cleanup done.\n"
 
 
