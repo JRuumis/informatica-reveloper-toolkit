@@ -117,7 +117,8 @@ class Pmrep:
                 return False
 
 
-    def import_repository_folder(self, import_xml_file_path):
+
+    def import_repository_folder(self, import_xml_file_path, target_folder_name_override=None):
 
         print "\n\nImporting an informatica folder from an XML file..."
         print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
@@ -151,7 +152,10 @@ class Pmrep:
             return False
 
         target_repository_name = self.connection["repository"]
-        target_folder_name = source_folder_name
+        if target_folder_name_override:
+            target_folder_name = target_folder_name_override
+        else:
+            target_folder_name = source_folder_name
 
 
         # write control file
@@ -167,7 +171,7 @@ class Pmrep:
         }
 
         for key in control_replacements.keys():
-            print "key: %s, replacement: %s" % (key, control_replacements[key])
+            #print "key: %s, replacement: %s" % (key, control_replacements[key])
             cmd_file_content = cmd_file_content.replace(key, control_replacements[key])
 
         system.write_file("import_control_current.ctl", cmd_file_content)
@@ -202,44 +206,12 @@ class Pmrep:
         return True
 
 
+    # TODO: export an import a folder but import with a different name
 
 
 
 
 
-
-
-
-"""
-    < !DOCTYPE
-    IMPORTPARAMS
-    SYSTEM
-    "{{IMPCNTL_DTD}}" >
-
-    < IMPORTPARAMS
-    CHECKIN_AFTER_IMPORT = "YES"
-    CHECKIN_COMMENTS = "Rittman Mead Informatica Repository auto-import"
-    RETAIN_GENERATED_VALUE = "YES"
-    APPLY_DEFAULT_CONNECTION = "NO" >
-
-    < FOLDERMAP
-    SOURCEFOLDERNAME = "{{SOURCE_FOLDER}}"
-    SOURCEREPOSITORYNAME = "{{SOURCE_REPOSITORY}}"
-    TARGETFOLDERNAME = "{{TARGET_FOLDER}}"
-    TARGETREPOSITORYNAME = "{{TARGET_REPOSITORY}}" / >
-"""
-
-
-
-
-
-
-# pmrep objectexport
-# pmrep objectimport
-
-# pmrep updateseqgenvals <-- updates sequence values!
-# pmrep VALIDATION
-# pmrep backup and restore
 
 
 
