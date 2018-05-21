@@ -17,5 +17,5 @@ class FromJSON:
 
         # TODO: validate the JSON content
 
-        print 'JSON successfully read!\n'
+        print 'JSON successfully read.\n'
 

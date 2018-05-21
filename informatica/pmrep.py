@@ -121,6 +121,10 @@ class Pmrep:
                 return False
 
     def export_repository_folders(self, informatica_folder_name_list, export_xml_folder_path):
+        print "----------------------------------------------------------------------------------"
+        print "----------------------------------------------------------------------------------"
+        print "Exporting %s informatica folders..." % len(informatica_folder_name_list)
+
         for informatica_folder in informatica_folder_name_list:
             export_result = self.export_repository_folder(informatica_folder, export_xml_folder_path)
             if not export_result: return False
@@ -131,14 +135,14 @@ class Pmrep:
     def import_repository_folder(self, import_xml_file_path, target_informatica_folder_name_override=None, create_target_folder_if_not_exist=True, delete_archive_after_successful_import=False):
 
         print "----------------------------------------------------------------------------------"
-        print "Importing an informatica folder from an XML file..."
-        print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
-        print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
-        print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
+        print "Importing an informatica folder from XML file %s...\n" % import_xml_file_path
 
         # validations and preparations
         if not os.path.isfile(import_xml_file_path):
             print "ERROR: Cannot find the XML import file [%s]" % import_xml_file_path
+            print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
+            print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
+            print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
             return False
 
         folder_name_parse = "Folder___(.+)___(.+)\."
@@ -146,10 +150,13 @@ class Pmrep:
         if res:
             source_repository_name = res.group(1)
             source_informatica_folder_name = res.group(2)
-            print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s" % (source_repository_name, source_informatica_folder_name)
+            print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s\n" % (source_repository_name, source_informatica_folder_name)
         else:
             print "ERROR: XML file name parsing failed!\nPlease note the file name is case-sensitive.\n" \
                   "The required XML import file name should follow this format: Folder___<source repository name>___<informatica source folder name).xml\nExample: Folder___UAT_REPO___SIL_Order_Lines.xml"
+            print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
+            print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
+            print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
             return False
 
         impcntl_dtd_path = os.path.join(system.get_environment_variable("INFA_HOME"), "server", "bin", "impcntl.dtd")
@@ -172,7 +179,7 @@ class Pmrep:
         existing_folders = self.get_repository_folders()
 
         if target_informatica_folder_name in existing_folders:
-            print "The target Informatica folder %s already exists in the repository." % target_informatica_folder_name
+            print "The target Informatica folder %s already exists in the repository. Current content will be overwritten.\n" % target_informatica_folder_name
         else:
             print "The target Informatica folder %s does not exist in the repository." % target_informatica_folder_name
             if not create_target_folder_if_not_exist:
@@ -224,7 +231,7 @@ class Pmrep:
             print "Message returned:\n=========================%s\n=========================\n" % import_result
             return False
         else:
-            print "Import successful!\n"
+            print "Import successful!"
             if res:
                 print "Import summary:\n %s\n" % res.group(0)
             else:
