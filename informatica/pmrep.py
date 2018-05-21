@@ -9,7 +9,7 @@ class Pmrep:
 
     def connect(self):
 
-        print "Connecting to Informatica pmrep..."
+        print "Connecting to Informatica with pmrep ..."
 
         connect_command = "pmrep connect -r %s -d %s -n %s -x %s" % \
                           (self.connection["repository"], self.connection["domain"], self.connection["login_name"], self.connection["password"])
@@ -17,10 +17,10 @@ class Pmrep:
         connect_result = system.execute_command_line(connect_command)
 
         if "connect completed successfully" in connect_result:
-            print "Connect to pmrep successful!\n"
+            print "Connection to Informatica established!\n"
             return True
         else:
-            print "ERROR: Connect to pmrep failed!"
+            print "ERROR: Connect to Informatica failed!"
             print "Message returned:\n=========================%s\n=========================\n" % connect_result
             return False
 

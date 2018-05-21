@@ -24,7 +24,7 @@ def is_environment_variable_defined(variable_name): return variable_name in os.e
 def get_environment_variable(variable_name):
     if is_environment_variable_defined(variable_name):
         variable_value = os.environ[variable_name]
-        print '\tEnvironment variable %s has the value [%s]' % (variable_name, variable_value)
+        #print '\tEnvironment variable %s has the value [%s]' % (variable_name, variable_value)
         return variable_value
     else:
         print 'ERROR: environment variable %s is not defined!' % variable_name
