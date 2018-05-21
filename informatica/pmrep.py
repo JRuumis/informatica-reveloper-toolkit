@@ -250,9 +250,11 @@ class Pmrep:
             return False
 
         xml_archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper().endswith('.XML')]
+        print "%s archive files found" % len(xml_archives_in_folder)
 
         if len(xml_archives_in_folder) == 0:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
+            return False
 
         for xml_archive_file_name in xml_archives_in_folder:
             import_result = self.import_repository_folder(os.path.join(archive_folder_name, xml_archive_file_name, delete_archive_after_successful_import))
