@@ -46,7 +46,7 @@ def write_file(path_to_file, content, rewrite=True):
 
     return True
 
-def write_log(log_name, log_content):
+def write_log(log_name, log_content, echo=True):
 
     log_folder = os.path.join('.','logs')
 
@@ -56,3 +56,6 @@ def write_log(log_name, log_content):
     lof_file_path = os.path.join(log_folder, log_name)
 
     write_file(lof_file_path, log_content, rewrite=True)
+
+    if echo:
+        print 'Log file writtenL %s' % lof_file_path
