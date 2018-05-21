@@ -54,8 +54,8 @@ infa_connection.connect()
 #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
 
 
-export_outcome = infa_connection.export()
-import_outcome = infa_connection.import()
+export_outcome = infa_connection.export_control()
+import_outcome = infa_connection.import_control()
 
 
 
