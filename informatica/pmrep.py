@@ -256,12 +256,19 @@ class Pmrep:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
             return False
 
+        imports_successful = 0
+        imports_failed = 0
         for xml_archive_file_name in xml_archives_in_folder:
             xml_archive_file_path = os.path.join(archive_folder_name, xml_archive_file_name)
             import_result = self.import_repository_folder(xml_archive_file_path, delete_archive_after_successful_import=delete_archive_after_successful_import)
 
-        print "All imports from the folder %s done.\n" % archive_folder_name
-        return True
+            if import_result:   imports_successful += 1
+            else:               imports_failed += 1
+
+        print "All imports from the folder %s done:\n\tsuccessful: %s\n\tfailed: %s" % (archive_folder_name, imports_successful, imports_failed)
+
+        if imports_failed > 0:  return False
+        else:                   return True
 
 
     def duplicate_rename_informatica_folder(self, informatica_source_folder_name, informatica_target_folder_name):
