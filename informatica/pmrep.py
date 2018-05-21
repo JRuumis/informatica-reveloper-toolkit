@@ -281,6 +281,8 @@ class Pmrep:
 
     def duplicate_rename_informatica_folder(self, informatica_source_folder_name, informatica_target_folder_name):
 
+        print "----------------------------------------------------------------------------------"
+        print "----------------------------------------------------------------------------------"
         print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s\n' % (informatica_source_folder_name, informatica_target_folder_name)
         if informatica_source_folder_name == informatica_target_folder_name:
             print "ERROR: source and target folders are the same."
@@ -301,11 +303,20 @@ class Pmrep:
         print "temp folder cleanup done.\n"
 
 
-        export_result = self.export_repository_folder(informatica_source_folder_name, '.')
+        export_result = self.export_repository_folder(informatica_source_folder_name, temp_folder_path)
 
         if export_result:
-            import_result = self.import_repository_folder('.',target_informatica_folder_name_override=informatica_target_folder_name, delete_archive_after_successful_import=True)
-            return True
+
+            xml_archives_in_temp_folder = [f for f in os.listdir(temp_folder_path) if os.path.isfile(os.path.join(temp_folder_path, f)) and f.upper().endswith('.XML')]
+            if not xml_archives_in_temp_folder:
+                print "ERROR: export XML file not found in %s folder." % temp_folder_path
+                return False
+            else:
+                import_xml_file_path = os.path.join(temp_folder_path, xml_archives_in_temp_folder[0])
+                import_result = self.import_repository_folder(import_xml_file_path, target_informatica_folder_name_override=informatica_target_folder_name, delete_archive_after_successful_import=True)
+
+                if import_result:   return True
+                else:               return False
 
         return False
 
