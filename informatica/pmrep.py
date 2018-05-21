@@ -90,7 +90,7 @@ class Pmrep:
     def export_repository_folder(self, informatica_folder_name, export_xml_folder_path):
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
         print "----------------------------------------------------------------------------------"
-        print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
+        print "Exporting the Informatica folder %s in XML format to folder %s..." % (informatica_folder_name, export_xml_folder_path)
         if not os.path.isdir(export_xml_folder_path):
             print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
             return False
@@ -102,6 +102,10 @@ class Pmrep:
         export_folder_command = "pmrep objectexport -f %s -u %s" % (informatica_folder_name, extract_xml_path)
 
         export_result = system.execute_command_line(export_folder_command)
+
+        # write log
+        log_file_name = xml_export_file_name + '.export.log'
+        system.write_log(log_file_name, export_result)
 
         results_search = "Exported (\d*) object\(s\) - (\d*) Error\(s\), - (\d*) Warning\(s\)"
         res = re.search(results_search, export_result)
@@ -223,7 +227,8 @@ class Pmrep:
 
         import_result = system.execute_command_line(import_folder_command)
 
-        log_file_name = os.path.basename(import_xml_file_path) + '.log'
+        # write log
+        log_file_name = os.path.basename(import_xml_file_path) + '.import.log'
         system.write_log(log_file_name, import_result)
 
         results_search = "(\d*) Processed, (\d*) Errors, (\d*) Warnings"
@@ -231,8 +236,8 @@ class Pmrep:
 
         if not "objectimport completed successfully." in import_result:
             print "ERROR: Folder import command was unsuccessful!"
+            print "Refer to the log file for details."
             print "Import command used: [%s]" % import_folder_command
-            print "Message returned:\n=========================%s\n=========================\n" % import_result
             return False
         else:
             print "Import successful!"
@@ -240,7 +245,7 @@ class Pmrep:
                 print "Import summary:\n %s\n" % res.group(0)
             else:
                 print "ERROR: cannot read import summary! Please analyse the detailed message below:"
-                print "Message returned:\n=========================%s\n=========================\n" % import_result
+                print "Refer to the log file for details."
                 return False
 
         if delete_archive_after_successful_import:

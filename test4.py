@@ -34,7 +34,8 @@ infa_connection.connect()
 #import_outcome = infa_connection.import_repository_folder("Folder___BIDW_UAT_EBS_961___Janis_BIDW_CUSTOM_SILOS.xml")
 
 
-# todo: import output to log
+# todo: import output to log - DONE
+# todo: export to log
 # todo: folder to migrate - auto
 # todo: infa test exports folder - also in config
 # todo: git
@@ -48,8 +49,8 @@ infa_connection.connect()
 #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
 #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
 
-infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_GDD', 'Janis_BIDW_CUSTOM_GDD')
+#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_GDD', 'Janis_BIDW_CUSTOM_GDD')
 infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_PLP', 'Janis_BIDW_CUSTOM_PLP')
-infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_SDE_ORA12', 'Janis_BIDW_CUSTOM_SDE_ORA12')
+#infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_SDE_ORA12', 'Janis_BIDW_CUSTOM_SDE_ORA12')
 
 
