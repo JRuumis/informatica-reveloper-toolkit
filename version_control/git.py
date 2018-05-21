@@ -4,6 +4,7 @@ Module for interacting with Git repositories.
 
 import re
 from subprocess import Popen, PIPE  # Used to execute from the command line.
+import os
 
 import rm_sys
 
@@ -20,10 +21,22 @@ def cmd(command):
 	>>> rm_sys.git.cmd(['pull'])
 	"""
 
-	command = [rm_sys.GIT_EXE, '-C', rm_sys.GIT_REPO] + command
-	output = Popen(command, stdout=PIPE, stderr=PIPE).communicate()
+	#command = [rm_sys.GIT_EXE, '-C', rm_sys.GIT_REPO] + command
+
+	current_dir = os.getcwd()
+	#print 'Now in: %s' % current_dir
+	os.chdir(rm_sys.GIT_REPO)
+	#print 'Now in: %s' % os.getcwd()
+	full_command = [rm_sys.GIT_EXE, ] + command
+
+	print '\tGit command: %s' % full_command
+
+	output = Popen(full_command , stdout=PIPE, stderr=PIPE).communicate()
 	if output[1]:
 		print(output[1])
+
+	os.chdir(current_dir)
+
 	return output
 
 
@@ -36,8 +49,13 @@ def checkout(brnch):
 
 def pull():
 	"""Pulls latest changes from the tracked remote Git repository."""
-	cmd(['fetch'])
+	cmd(['fetch',rm_sys.GIT_REMOTE])
 	return cmd(['pull'])
+
+def pull_branch(branch):
+	"""Pulls latest changes from the tracked remote Git repository."""
+	cmd(['fetch', rm_sys.GIT_REMOTE])
+	return cmd(['pull', rm_sys.GIT_REMOTE, branch])
 
 
 def branch(brnch, base):
