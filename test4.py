@@ -1,11 +1,11 @@
 from informatica import configuration
-from informatica import validation
+from informatica import access_validation
 from informatica import pmrep
 
 
 config = configuration.FromJSON()
 
-validation_result = validation.system_validation()
+validation_result = access_validation.check()
 if not validation_result: exit (1)
 
 
@@ -39,6 +39,8 @@ infa_connection.connect()
 # todo: folder to migrate - auto - DONE
 # todo: infa test exports folder - also in config - DONE
 # todo: git
+# todo: infa validation - to informatica class
+# todo: git validation - to git class
 # todo: calling from command line
     # todo: export (git)
     # todo: import, (git)

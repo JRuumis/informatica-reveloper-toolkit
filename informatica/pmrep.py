@@ -5,17 +5,23 @@ import os
 
 class Pmrep:
     def __init__(self, connection):
+
+        # todo validate config, throw exception, print descriptiive error
+
         self.connection = connection["connections"]["EBS_UAT"] # TODO: nooooooooooooooooooooooooooooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.xml_export_folder = connection["xml_export_folder"]
         self.folders_to_migrate = connection["folders_to_migrate"]
 
     def connect(self):
-
         print "Connecting to Informatica with pmrep ..."
 
         connect_command = "pmrep connect -r %s -d %s -n %s -x %s" % \
-                          (self.connection["repository"], self.connection["domain"], self.connection["login_name"], self.connection["password"])
-
+                          (
+                              self.connection["repository"],
+                              self.connection["domain"],
+                              self.connection["login_name"],
+                              self.connection["password"]
+                          )
         connect_result = system.execute_command_line(connect_command)
 
         if "connect completed successfully" in connect_result:
@@ -27,16 +33,15 @@ class Pmrep:
             return False
 
 
-    def get_objects_list(self, object_type, folder=None):
-
+    def get_objects_list(self, object_type, informatica_folder=None):
         listing_command_head = "pmrep listobjects -o %s" % object_type
-        if folder:
-            additional_folder = " -f %s" % folder
+
+        if informatica_folder:
+            additional_folder = " -f %s" % informatica_folder
         else:
             additional_folder = ""
 
         listing_command = listing_command_head + additional_folder
-
         listing_result = system.execute_command_line(listing_command)
 
         if not "listobjects completed successfully." in listing_result:
@@ -45,45 +50,50 @@ class Pmrep:
         else:
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
             res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
+
             if res:
                 objects_list = res.group(1).splitlines()
                 objects_list_cleaned = [o.strip() for o in objects_list if len(o) > 0]
-
                 return objects_list_cleaned  # TODO: add column split
             else:
                 print "listobjects parse result appears to be empty: %s" % str(res)
                 return List()
 
-
     def get_repository_folders(self):
         return self.get_objects_list("folder")
 
-    def get_folder_workflows(self, folder_name):
-        return self.get_objects_list("workflow", folder=folder_name)
+    def get_workflows(self, informatica_folder_name):
+        return self.get_objects_list("workflow", informatica_folder=informatica_folder_name)
 
-    def get_folder_mappings(self, folder_name):
-        return self.get_objects_list("mapping", folder=folder_name)
+    def get_mappings(self, informatica_folder_name):
+        return self.get_objects_list("mapping", informatica_folder=informatica_folder_name)
 
-    def get_folder_sessions(self, folder_name):
-        return self.get_objects_list("session", folder=folder_name)
+    def get_sessions(self, informatica_folder_name):
+        return self.get_objects_list("session", informatica_folder=informatica_folder_name)
 
-    def get_folder_sources(self, folder_name):
-        return self.get_objects_list("source", folder=folder_name)
+    def get_sources(self, informatica_folder_name):
+        return self.get_objects_list("source", informatica_folder=informatica_folder_name)
 
-    def get_folder_targets(self, folder_name):
-        return self.get_objects_list("target", folder=folder_name)
+    def get_targets(self, informatica_folder_name):
+        return self.get_objects_list("target", informatica_folder=informatica_folder_name)
 
     def create_repository_folder(self, folder_name, shared=True):
         print "Creating a new folder %s..." % folder_name
-        if shared: shared_flag = "-s"
-        else: shared_flag = ""
-        create_folder_command = "pmrep createfolder -n %s %s" % (folder_name, shared_flag)
 
+        if shared:  shared_flag = "-s"
+        else:       shared_flag = ""
+
+        create_folder_command = "pmrep createfolder -n %s %s" % (folder_name, shared_flag)
         create_result = system.execute_command_line(create_folder_command)
 
         if not "createfolder completed successfully." in create_result:
             print "ERROR: Create folder command was unsuccessful!"
-            print "Message returned:\n=========================%s\n=========================\n" % create_result
+
+            # write log
+            log_file_name = folder_name + '.create-folder.error.log'
+            system.write_log(log_file_name, create_result)
+
+            print "Check log file for details.\n"
             return False
         else:
             print "Folder successfully created!"
@@ -93,16 +103,16 @@ class Pmrep:
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
         print "----------------------------------------------------------------------------------"
         print "Exporting the Informatica folder %s in XML format to folder %s..." % (informatica_folder_name, export_xml_folder_path)
+
         if not os.path.isdir(export_xml_folder_path):
             print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
             return False
+
         print "Export file name: %s" % xml_export_file_name
         print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
         extract_xml_path = os.path.join(export_xml_folder_path, xml_export_file_name)
-
         export_folder_command = "pmrep objectexport -f %s -u %s" % (informatica_folder_name, extract_xml_path)
-
         export_result = system.execute_command_line(export_folder_command)
 
         # write log
@@ -126,6 +136,7 @@ class Pmrep:
                 print "ERROR: cannot read export summary!"
                 return False
 
+
     def export_repository_folders(self, informatica_folder_name_list, export_xml_folder_path):
         print "----------------------------------------------------------------------------------"
         print "----------------------------------------------------------------------------------"
@@ -139,7 +150,6 @@ class Pmrep:
 
 
     def import_repository_folder(self, import_xml_file_path, target_informatica_folder_name_override=None, create_target_folder_if_not_exist=True, delete_archive_after_successful_import=False):
-
         print "----------------------------------------------------------------------------------"
         print "Importing an informatica folder from XML file %s...\n" % import_xml_file_path
 
@@ -183,7 +193,7 @@ class Pmrep:
 
 
         # create target folder if it does not exist already
-        existing_folders = self.get_repository_folders()
+        existing_folders = self.get_repository_folders
 
         if target_informatica_folder_name in existing_folders:
             print "The target Informatica folder %s already exists in the repository. Current content will be overwritten.\n" % target_informatica_folder_name
@@ -340,14 +350,3 @@ class Pmrep:
 
     def import_control(self):
         return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)
-
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 
 from informatica import configuration
 #from informatica import system
-from informatica import validation
+from informatica import access_validation
 
 
 
@@ -12,5 +12,5 @@ config = configuration.FromJSON()
 #print "\n\n\n"
 
 
-res = validation.system_validation()
+res = access_validation.check()
 print res

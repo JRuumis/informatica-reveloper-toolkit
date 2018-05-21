@@ -1,11 +1,11 @@
 from informatica import configuration
-from informatica import validation
+from informatica import access_validation
 from informatica import pmrep
 
 
 config = configuration.FromJSON()
 
-validation_result = validation.system_validation()
+validation_result = access_validation.check()
 if not validation_result: exit (1)
 
 
@@ -17,13 +17,13 @@ infa_connection.connect()
 ress = infa_connection.get_objects_list(object_type="folder")
 print len(ress)
 
-foo = infa_connection.get_repository_folders()
+foo = infa_connection.get_repository_folders
 print len(foo)
 
-wfl = infa_connection.get_folder_workflows("SILOS")
+wfl = infa_connection.get_workflows("SILOS")
 print len(wfl)
 
-mpg = infa_connection.get_folder_mappings("SILOS")
+mpg = infa_connection.get_mappings("SILOS")
 print len(mpg)
 
 

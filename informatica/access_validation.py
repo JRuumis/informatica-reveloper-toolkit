@@ -1,8 +1,10 @@
-
 from informatica import system
 
 
-def system_validation():
+# todo: move this to informatica class?????
+#
+
+def check():
 
     print "Validating system configuration for running pmrep..."
 
