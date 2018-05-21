@@ -226,7 +226,7 @@ class Pmrep:
         else:
             print "Import successful!\n"
             if res:
-                print "Import summary:\n %s" % res.group(0)
+                print "Import summary:\n %s\n" % res.group(0)
             else:
                 print "ERROR: cannot read import summary! Please analyse the detailed message below:"
                 print "Message returned:\n=========================%s\n=========================\n" % import_result
@@ -265,6 +265,7 @@ class Pmrep:
             if import_result:   imports_successful += 1
             else:               imports_failed += 1
 
+        print "----------------------------------------------------------------------------------"
         print "All imports from the folder %s done:\n\tsuccessful: %s\n\tfailed: %s" % (archive_folder_name, imports_successful, imports_failed)
 
         if imports_failed > 0:  return False
