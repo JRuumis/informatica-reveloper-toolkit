@@ -5,7 +5,7 @@ from informatica import access_validation
 
 
 
-config = configuration.FromJSON()
+config = configuration.get_from_json()
 
 #print config.content
 #print config.content['connections']['EBS_UAT']['domain']

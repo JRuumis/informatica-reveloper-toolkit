@@ -2,7 +2,7 @@ import json
 
 def test123(): print 'uril...'
 
-class FromJSON:
+class get_from_json:
 
     def __init__(self, config_json = 'config.json'):
 

@@ -3,7 +3,7 @@ from informatica import access_validation
 from informatica import pmrep
 
 
-config = configuration.FromJSON()
+config = configuration.get_from_json()
 
 validation_result = access_validation.check()
 if not validation_result: exit (1)
