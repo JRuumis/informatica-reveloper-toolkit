@@ -36,6 +36,13 @@ infa_connection.connect()
 
 # todo: folder to migrate - auto
 # todo: infa test exports folder - also in config
+# todo: git
+# todo: calling from command line
+    # export (git)
+    # import, (git)
+    # duplicate folder with different name
+    # create folder
+    # delete folder
 
 #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
 #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
