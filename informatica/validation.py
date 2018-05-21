@@ -4,7 +4,7 @@ from informatica import system
 
 def system_validation():
 
-    print "Validating system fonfiguration for running PMCMD..."
+    print "Validating system fonfiguration for running PMREP..."
 
     required_system_variables = [
         'INFA_HOME',
