@@ -89,7 +89,7 @@ class Pmrep:
 
     def export_repository_folder(self, informatica_folder_name, export_xml_folder_path):
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
-        print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
+        print "\nExporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
         if not os.path.isdir(export_xml_folder_path):
             print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
         print "Export file name: %s" % xml_export_file_name
@@ -112,7 +112,7 @@ class Pmrep:
         else:
             print "Export successful!"
             if res:
-                print "Export summary:\n %s" % res.group(0)
+                print "Export summary:\n %s\n" % res.group(0)
                 return True
             else:
                 print "ERROR: cannot read export summary!"
@@ -234,7 +234,7 @@ class Pmrep:
             print "ERROR: Folder %s does not exist!" % archive_folder_name
             return False
 
-        archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper.endswith('.XML')]
+        archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper().endswith('.XML')]
 
         if len(archives_in_folder) == 0:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
