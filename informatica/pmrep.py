@@ -284,7 +284,7 @@ class Pmrep:
         print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s\n' % (informatica_source_folder_name, informatica_target_folder_name)
         if informatica_source_folder_name == informatica_target_folder_name:
             print "ERROR: source and target folders are the same."
-
+            return False
 
         # cleanup the temp folder
         print "Removing all xml archives from the temp folder..."
