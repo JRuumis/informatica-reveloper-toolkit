@@ -17,7 +17,7 @@ class Pmrep:
         connect_result = system.execute_command_line(connect_command)
 
         if "connect completed successfully" in connect_result:
-            print "Connect to pmrep successful!"
+            print "Connect to pmrep successful!\n"
             return True
         else:
             print "ERROR: Connect to pmrep failed!"
@@ -89,7 +89,8 @@ class Pmrep:
 
     def export_repository_folder(self, informatica_folder_name, export_xml_folder_path):
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
-        print "\nExporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
+        print "----------------------------------------------------------------------------------"
+        print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
         if not os.path.isdir(export_xml_folder_path):
             print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
         print "Export file name: %s" % xml_export_file_name
@@ -110,7 +111,7 @@ class Pmrep:
             print "Message returned:\n=========================%s\n=========================\n" % export_result
             return False
         else:
-            print "Export successful!"
+            print "Export successful!\n"
             if res:
                 print "Export summary:\n %s\n" % res.group(0)
                 return True
@@ -128,7 +129,8 @@ class Pmrep:
 
     def import_repository_folder(self, import_xml_file_path, target_folder_name_override=None, create_target_folder_if_not_exist=True):
 
-        print "\n\nImporting an informatica folder from an XML file..."
+        print "----------------------------------------------------------------------------------"
+        print "Importing an informatica folder from an XML file..."
         print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
         print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
         print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
@@ -149,9 +151,9 @@ class Pmrep:
                   "The required XML import file name should follow this format: Folder___<source repository name>___<informatica source folder name).xml\nExample: Folder___UAT_REPO___SIL_Order_Lines.xml"
             return False
 
-        imp_control_definition_path = os.path.join(system.get_environment_variable("INFA_HOME"), "server", "bin", "impcntl.dtd")
-        if not os.path.isfile(imp_control_definition_path):
-            print "ERROR: Cannot find the control definition file 'impcntl.dtd' in path $INFA_HOME/server/bin/imcntl.dtd (%s)" % imp_control_definition_path
+        impcntl_dtd_path = os.path.join(system.get_environment_variable("INFA_HOME"), "server", "bin", "impcntl.dtd")
+        if not os.path.isfile(impcntl_dtd_path):
+            print "ERROR: Cannot find the control definition file 'impcntl.dtd' in path $INFA_HOME/server/bin/imcntl.dtd (%s)" % impcntl_dtd_path
             return False
 
         if not os.path.isfile("import_control_template.ctl"):
@@ -180,24 +182,29 @@ class Pmrep:
 
 
         # write control file
-        print "Writing control file..."
-        cmd_file_content = system.read_file("import_control_template.ctl")
+        template_ctl_file_name = "import_control_template.ctl"
+        current_ctl_file_name = "import_control_current.ctl"
 
-        control_replacements = {
-            "{{IMPCNTL_DTD}}" : imp_control_definition_path,
-            "{{SOURCE_FOLDER}}" : source_folder_name,
-            "{{SOURCE_REPOSITORY}}" : source_repository_name,
-            "{{TARGET_FOLDER}}" : target_folder_name,
-            "{{TARGET_REPOSITORY}}" : target_repository_name
+        print "Writing control file %s based on %s ..." % (current_ctl_file_name, template_ctl_file_name)
+        if os.path.isfile(template_ctl_file_name):
+            ctl_file_content = system.read_file(template_ctl_file_name)
+        else:
+            print "ERROR: Control template file %s not found in the current folder!"
+            return False
+
+        ctl_replacements = {
+            "{{IMPCNTL_DTD}}": impcntl_dtd_path,
+            "{{SOURCE_FOLDER}}": source_folder_name,
+            "{{SOURCE_REPOSITORY}}": source_repository_name,
+            "{{TARGET_FOLDER}}": target_folder_name,
+            "{{TARGET_REPOSITORY}}": target_repository_name
         }
 
-        for key in control_replacements.keys():
-            #print "key: %s, replacement: %s" % (key, control_replacements[key])
-            cmd_file_content = cmd_file_content.replace(key, control_replacements[key])
+        for key in ctl_replacements.keys():
+            ctl_file_content = ctl_file_content.replace(key, ctl_replacements[key])
 
-        system.write_file("import_control_current.ctl", cmd_file_content)
-
-        print "Control file written."
+        system.write_file(current_ctl_file_name, ctl_file_content)
+        print "Control file written.\n"
 
 
         # execute import
@@ -216,18 +223,21 @@ class Pmrep:
             print "Message returned:\n=========================%s\n=========================\n" % import_result
             return False
         else:
-            print "Import successful!"
+            print "Import successful!\n"
             if res:
                 print "Import summary:\n %s" % res.group(0)
                 return True
             else:
-                print "ERROR: cannot read export summary!"
+                print "ERROR: cannot read import summary! Please analyse the detailed message below:"
+                print "Message returned:\n=========================%s\n=========================\n" % import_result
                 return False
 
         return True
 
 
     def import_all_xmls_from_folder(self, archive_folder_name, delete_archive_after_successful_import=False):
+        print "----------------------------------------------------------------------------------"
+        print "----------------------------------------------------------------------------------"
         print "Importing all archive XML files from the folder %s" % archive_folder_name
 
         if not os.path.isdir(archive_folder_name):
@@ -245,9 +255,19 @@ class Pmrep:
             if import_result and delete_archive_after_successful_import:
                 os.remove(archive_xml)
 
+        print "All imports from the folder %s done." % archive_folder_name
+
         return True
 
 
+    def duplicate_rename_informatica_folder(self, informatica_source_folder_name, informatica_target_folder_name):
+
+        print 'Duplicating Informatica repository folder:\n\tsource: %s\n\ttarget: %s' % (informatica_source_folder_name, informatica_target_folder_name)
+        if informatica_source_folder_name == informatica_target_folder_name:
+            print "ERROR: source and target folders are the same"
+
+
+        self.export_repository_folder()
 
 
 

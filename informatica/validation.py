@@ -25,7 +25,7 @@ def system_validation():
               "Make sure the PATH variable is updated with the INFA_HOME bin path."
         return False
     else:
-        print "Command pmrep successfully validated."
+        print "Command pmrep successfully validated.\n"
 
 
 
