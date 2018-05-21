@@ -4,7 +4,7 @@ from informatica import system
 
 def system_validation():
 
-    print "Validating system fonfiguration for running pmrep..."
+    print "Validating system configuration for running pmrep..."
 
     required_system_variables = [
         'INFA_HOME',
@@ -15,7 +15,6 @@ def system_validation():
 
     system_variables_exist_list = [system.get_environment_variable(v) for v in required_system_variables]
     system_variables_exist = reduce( (lambda a,b: a and b), system_variables_exist_list )
-
     if not system_variables_exist: return False
 
     print "Validating the pmrep command..."
@@ -26,8 +25,6 @@ def system_validation():
         return False
     else:
         print "Command pmrep successfully validated.\n"
-
-
 
     return True
 

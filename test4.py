@@ -36,15 +36,16 @@ infa_connection.connect()
 
 # todo: import output to log - DONE
 # todo: export to log - DONE
-# todo: folder to migrate - auto
-# todo: infa test exports folder - also in config
+# todo: folder to migrate - auto - DONE
+# todo: infa test exports folder - also in config - DONE
 # todo: git
 # todo: calling from command line
-    # export (git)
-    # import, (git)
-    # duplicate folder with different name
-    # create folder
-    # delete folder
+    # todo: export (git)
+    # todo: import, (git)
+    # todo: duplicate folder with different name
+    # todo: create folder
+    # todo: delete folder
+# todo: REFACTOR (4 - 12h)
 
 #infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_GDD', 'Janis_BIDW_CUSTOM_GDD')
 #infa_connection.duplicate_rename_informatica_folder('BIDW_CUSTOM_PLP', 'Janis_BIDW_CUSTOM_PLP')
