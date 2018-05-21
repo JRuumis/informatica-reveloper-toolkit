@@ -87,13 +87,15 @@ class Pmrep:
             print "Folder successfully created!"
 
 
-    def export_repository_folder(self, informatica_folder_name, extract_xml_folder_path):
+    def export_repository_folder(self, informatica_folder_name, export_xml_folder_path):
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
-        print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, extract_xml_folder_path)
+        print "Exporting the Informatica folder %s to XML format in folder %s..." % (informatica_folder_name, export_xml_folder_path)
+        if not os.path.isdir(export_xml_folder_path):
+            print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
         print "Export file name: %s" % xml_export_file_name
         print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
-        extract_xml_path = os.path.join(extract_xml_folder_path, xml_export_file_name)
+        extract_xml_path = os.path.join(export_xml_folder_path, xml_export_file_name)
 
         export_folder_command = "pmrep objectexport -f %s -u %s" % (informatica_folder_name, extract_xml_path)
 
@@ -116,15 +118,20 @@ class Pmrep:
                 print "ERROR: cannot read export summary!"
                 return False
 
+    def export_repository_folders(self, informatica_folder_name_list, export_xml_folder_path):
+        for informatica_folder in informatica_folder_name_list:
+            export_result = self.export_repository_folder(informatica_folder, export_xml_folder_path)
+            if not export_result: return False
+
+        return True
 
 
-    def import_repository_folder(self, import_xml_file_path, target_folder_name_override=None):
+    def import_repository_folder(self, import_xml_file_path, target_folder_name_override=None, create_target_folder_if_not_exist=True):
 
         print "\n\nImporting an informatica folder from an XML file..."
         print "INFO: XML file naming is important - the source repository and folder names are used by the import procedure and are derived from the import XML file name."
         print "INFO: XML file names are case-sensitive. Neither the repository nor the folder name should not have two consecutive underlines in it."
         print "INFO: Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
-
 
         # validations and preparations
         if not os.path.isfile(import_xml_file_path):
@@ -156,6 +163,20 @@ class Pmrep:
             target_folder_name = target_folder_name_override
         else:
             target_folder_name = source_folder_name
+
+
+        # create target folder if it does not exist already
+        existing_folders = self.get_repository_folders()
+
+        if target_folder_name in existing_folders:
+            print "The target Informatica folder %s already exists in the repository." % target_folder_name
+        else:
+            print "The target Informatica folder %s does not exist in the repository." % target_folder_name
+            if not create_target_folder_if_not_exist:
+                print "ERROR: create_target_folder_if_not_exist parameter is set to False. The folder will not be created. Exiting..."
+                return False
+            else:
+                self.create_repository_folder(target_folder_name)
 
 
         # write control file
@@ -204,6 +225,30 @@ class Pmrep:
                 return False
 
         return True
+
+
+    def import_all_xmls_from_folder(self, archive_folder_name, delete_archive_after_successful_import=False):
+        print "Importing all archive XML files from the folder %s" % archive_folder_name
+
+        if not os.path.isdir(archive_folder_name):
+            print "ERROR: Folder %s does not exist!" % archive_folder_name
+            return False
+
+        archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper.endswith('.XML')]
+
+        if len(archives_in_folder) == 0:
+            print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
+
+        for archive_xml in archives_in_folder:
+            import_result = self.import_repository_folder(archive_xml)
+
+            if import_result and delete_archive_after_successful_import:
+                os.remove(archive_xml)
+
+        return True
+
+
+
 
 
     # TODO: export an import a folder but import with a different name
