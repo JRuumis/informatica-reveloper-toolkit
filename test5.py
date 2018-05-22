@@ -30,9 +30,10 @@ infa_connection.connect()
     # todo: delete folder
 # todo: REFACTOR (4 - 12h)
 
-ggg = git.Git
 
-ggg.validate_environment()
+ggg = git.Git()
+
+asdf = ggg.validate_environment()
 
 
 

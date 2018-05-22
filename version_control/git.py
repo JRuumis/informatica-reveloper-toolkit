@@ -2,9 +2,9 @@
 from informatica import system
 
 class Git:
-    # todo: implement
+    //def __init__(self /*, config*/):
 
-    def __init__(self, config):
+    def __init__(self):
         print 'asdf'
 
 
