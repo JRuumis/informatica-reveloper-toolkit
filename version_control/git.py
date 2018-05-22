@@ -79,7 +79,7 @@ class Git:
             print 'Perform `git clone <URL>` to establish a git repository in this folder.'
             return False
 
-        repo_root_for_folder = self.execute_command('rev-parse --show-root')
+        repo_root_for_folder = self.execute_command('rev-parse --show-toplevel')
         if repo_root_for_folder == self.git_root_folder:
             print 'The folder %s is a valid git repository root folder.' % self.git_root_folder
         else:
