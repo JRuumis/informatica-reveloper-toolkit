@@ -19,7 +19,7 @@ def cmd(command):
 
     E.g.
 
-    >>> rm_sys.git.cmd(['pull'])
+    >>> rm_sys.git.execute_command(['pull'])
     """
 
     #command = [rm_sys.GIT_EXE, '-C', rm_sys.GIT_REPO] + command
