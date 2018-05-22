@@ -73,7 +73,7 @@ class Git:
         print 'Validating git repository under git repository root folder...'
 
         inside_work_tree = self.execute_command('rev-parse --is-inside-work-tree')
-        if not inside_work_tree == 'true':
+        if not inside_work_tree.strip() == 'true':
             print 'ERROR: The git.repository_root_folder %s is found to be neither a git repository root ' \
                   'nor a repository subfolder.' % self.git_root_folder
             print 'Perform `git clone <URL>` to establish a git repository in this folder.'
