@@ -10,17 +10,18 @@ class Git:
 
     def __init__(self, config, validate=True):
 
-        try:
-            self.git_remote_url = config.content['git']['remote_url']
-            self.git_root_folder = os.path.normpath( config.content['git']['repository_root_folder'] )
-            self.git_informatica_sub = config.content['git']['informatica_subfolder'].strip('/').strip('\\').strip('\\\\')
-            self.git_informatica_root_folder = os.path_normpath( os.path.join(self.git_root_folder, self.git_informatica_sub) )
-            self.git_default_branch = config.content['git']['default_branch']
+        #try:
 
-        except Exception as err:
-            print 'ERROR: Failed to read all required parameters from config.json for git access.'
-            print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
-            exit(1)
+        self.git_remote_url = config.content['git']['remote_url']
+        self.git_root_folder = os.path.normpath( config.content['git']['repository_root_folder'] )
+        self.git_informatica_sub = config.content['git']['informatica_subfolder'].strip('/').strip('\\').strip('\\\\')
+        self.git_informatica_root_folder = os.path.normpath( os.path.join(self.git_root_folder, self.git_informatica_sub) )
+        self.git_default_branch = config.content['git']['default_branch']
+
+        #except Exception as err:
+        #    print 'ERROR: Failed to read all required parameters from config.json for git access.'
+        #    print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
+        #    exit(1)
 
         if validate:
             result = self.validate_environment()

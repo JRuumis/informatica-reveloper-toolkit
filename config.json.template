@@ -18,7 +18,7 @@
 
   "git": {
     "remote_url": "full git repository URL with user name and password included. example: https://git_user:git_password@bitbucketserver.local/dev/migration.git",
-    "repository_root_folder": "full path to the OS root folder where the git repository has been cloned. example: /u01/migration/BI/",
+    "repository_root_folder": "full path to the OS root folder where the git repository has been cloned. example: /u01/migration/BI",
     "informatica_subfolder": "within the repository root folder, there can be a subfolder dedicated for informatica. this is relative, not absolute path. leave empty if repo root serves as informatica root. example: informatica/archives",
     "default_branch": "master"
   }
