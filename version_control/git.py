@@ -73,7 +73,7 @@ class Git:
         print 'Validating git repository under git repository root folder...'
 
         inside_work_tree = self.execute_command('rev-parse --is-inside-work-tree')
-        if not inside_work_tree.strip() == 'true':
+        if not inside_work_tree == 'true':
             print 'ERROR: The git.repository_root_folder %s is found to be neither a git repository root ' \
                   'nor a repository subfolder.' % self.git_root_folder
             print 'Perform `git clone <URL>` to establish a git repository in this folder.'
@@ -128,13 +128,14 @@ class Git:
 
         if echo:    print '\tGit command: %s' % full_command
 
-        output = system.execute_command_line(full_command)
+        output = system.execute_command_line(full_command).strip()
         #output = Popen(full_command, stdout=PIPE, stderr=PIPE).communicate()
 
         #if output[1]:   print 'git output: %s' % output[1]
         #if output[2]:   print 'git error: %s' % output[2]
 
-        print 'DEBUGGGGGG git output:\n%s\n' % output
+        print 'DEBUG: git command: %s' % full_command
+        print 'DEBUG: git output:\n%s\n' % output
 
         os.chdir(current_dir)
         return output
