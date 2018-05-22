@@ -1,6 +1,13 @@
 {
-  "connections": {
-    "EBS_UAT": {
+  "informatica_connections": {
+    "default": {
+      "repository": "informatica repository name",
+      "domain": "informatica domain name",
+      "login_name": "informatica user name (Administrator recommended)",
+      "password": "informatica user password"
+    },
+
+    "additional1_RENAME_THIS": {
       "repository": "informatica repository name",
       "domain": "informatica domain name",
       "login_name": "informatica user name (Administrator recommended)",

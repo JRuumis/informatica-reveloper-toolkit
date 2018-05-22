@@ -1,11 +1,11 @@
-from informatica import configuration
-from informatica import access_validation
+from common import configuration
+from informatica import OBSOLETE___access_validation
 from informatica import pmrep
 
 
 config = configuration.get_from_json()
 
-validation_result = access_validation.check()
+validation_result = OBSOLETE___access_validation.check()
 if not validation_result: exit (1)
 
 

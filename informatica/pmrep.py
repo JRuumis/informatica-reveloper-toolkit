@@ -1,35 +1,93 @@
-from informatica import system
+from common import system
+import version_control
+
 import re
 import os
 
 
+
 class Pmrep:
-    def __init__(self, connection):
+    def __init__(self, config, git_control, connection_name='default', validate=True, verbose=False, connect=True):
 
-        # todo validate config, throw exception, print descriptiive error
+        self.verbose = verbose
 
-        self.connection = connection["connections"]["EBS_UAT"] # TODO: nooooooooooooooooooooooooooooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        self.xml_export_folder = connection["xml_export_folder"]
-        self.folders_to_migrate = connection["folders_to_migrate"]
+        # TODO: !!!!!!!!!!!!!!!!!!!!
+        self.git_control = git_control
+        #self.git_control = version_control.git.Git(config)
+
+        try:
+            self.connection = config.connection["informatica_connections"][connection_name]
+            self.connection_repository = self.connection["repository"]
+            self.connection_domain = self.connection["domain"]
+            self.connection_login_name = self.connection["login_name"]
+            self.connection_password = self.connection["password"]
+            self.xml_export_folder = config.connection["xml_export_folder"]
+            self.folders_to_migrate = config.connection["folders_to_migrate"]
+
+        except Exception as err:
+            print 'ERROR: Failed to read all required parameters from config.json for informatica pmrep access.'
+            print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
+            print 'Use the config.json.template file in this folder as your reference.\n'
+            if verbose:
+                print 'Exception:\n%s\n' % str(err)
+            exit(1)
+
+        if validate:
+            result = self.validate_environment()
+            if not result:
+                exit(1)
+
+        if connect:
+            self.connect()
+
+
+    def validate_environment(self):
+        print "Validating system configuration for running pmrep..."
+
+        required_system_variables = [
+            'INFA_HOME',
+            'INFA_DOMAINS_FILE',
+            'LD_LIBRARY_PATH',
+            'PATH'
+        ]
+
+        system_variables_exist_list = [system.get_environment_variable(v) for v in required_system_variables]
+        system_variables_exist = reduce((lambda a, b: a and b), system_variables_exist_list)
+        if not system_variables_exist: return False
+
+        print "Validating the pmrep command..."
+        if not system.check_command_exists("pmrep -version"):
+            print "ERROR: Command pmrep not found. Please run manually 'pmrep -version' to troubleshoot.\n" \
+                  "Make sure the required environment variables are set and with correct values.\n" \
+                  "Make sure the PATH variable is updated with the INFA_HOME bin path.\n" \
+                  "Please refer to the documentation for instructions on how to set up environment variables.\n"
+            return False
+        else:
+            print "Command pmrep successfully validated.\n"
+
+        return True
+
 
     def connect(self):
         print "Connecting to Informatica with pmrep ..."
 
         connect_command = "pmrep connect -r %s -d %s -n %s -x %s" % \
                           (
-                              self.connection["repository"],
-                              self.connection["domain"],
-                              self.connection["login_name"],
-                              self.connection["password"]
+                              self.connection_repository,
+                              self.connection_domain,
+                              self.connection_login_name,
+                              self.connection_password
                           )
         connect_result = system.execute_command_line(connect_command)
 
         if "connect completed successfully" in connect_result:
             print "Connection to Informatica established!\n"
+            if self.verbose:
+                print "Message returned:\n=========================\n%s\n=========================\n" % connect_result
             return True
         else:
             print "ERROR: Connect to Informatica failed!"
-            print "Message returned:\n=========================%s\n=========================\n" % connect_result
+            print "Message returned:\n=========================\n%s\n=========================\n" % connect_result
             return False
 
 
@@ -42,22 +100,27 @@ class Pmrep:
             additional_folder = ""
 
         listing_command = listing_command_head + additional_folder
+        if self.verbose:
+            print 'pmrep command: %s#n' % listing_command
+
         listing_result = system.execute_command_line(listing_command)
+        if self.verbose:
+            print 'pmrep command result\n%s\n\n' % listing_result
 
         if not "listobjects completed successfully." in listing_result:
             print "ERROR: Listing command was unsuccessful!"
-            print "Message returned:\n=========================%s\n=========================\n" % listing_result
+            print "Message returned:\n=========================\n%s\n=========================\n" % listing_result
         else:
             results_search = "Invoked at (?:.*?$)(.*).listobjects completed successfully."
-            res = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
+            parsed_result = re.search(results_search, listing_result, re.MULTILINE|re.DOTALL)
 
-            if res:
-                objects_list = res.group(1).splitlines()
+            if parsed_result:
+                objects_list = parsed_result.group(1).splitlines()
                 objects_list_cleaned = [o.strip() for o in objects_list if len(o) > 0]
                 return objects_list_cleaned  # TODO: add column split
             else:
-                print "listobjects parse result appears to be empty: %s" % str(res)
-                return List()
+                print "listobjects parse result appears to be empty: %s" % str(parsed_result)
+                return []
 
     def get_repository_folders(self):
         return self.get_objects_list("folder")
@@ -84,7 +147,12 @@ class Pmrep:
         else:       shared_flag = ""
 
         create_folder_command = "pmrep createfolder -n %s %s" % (folder_name, shared_flag)
+        if self.verbose:
+            print 'create folder command: %s\n' % create_folder_command
+
         create_result = system.execute_command_line(create_folder_command)
+        if self.verbose:
+            print 'create folder command result:\n%s\n\n' % create_result
 
         if not "createfolder completed successfully." in create_result:
             print "ERROR: Create folder command was unsuccessful!"
@@ -93,44 +161,56 @@ class Pmrep:
             log_file_name = folder_name + '.create-folder.error.log'
             system.write_log(log_file_name, create_result)
 
-            print "Check log file for details.\n"
+            print 'Check log file for details: %s\n' % log_file_name
             return False
         else:
-            print "Folder successfully created!"
+            print "Folder successfully created!\n"
 
 
     def export_repository_folder(self, informatica_folder_name, export_xml_folder_path):
+
         xml_export_file_name = "Folder___%s___%s.xml" % (self.connection["repository"], informatica_folder_name)
+
         print "----------------------------------------------------------------------------------"
-        print "Exporting the Informatica folder %s in XML format to folder %s..." % (informatica_folder_name, export_xml_folder_path)
+        print "Exporting the Informatica folder %s in XML format to folder %s..." \
+              % (informatica_folder_name, export_xml_folder_path)
 
         if not os.path.isdir(export_xml_folder_path):
-            print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" % export_xml_folder_path
+            print "ERROR: The folder %s does not exist! (Create the folder and make sure Python can access it.)" \
+                  % export_xml_folder_path
             return False
 
         print "Export file name: %s" % xml_export_file_name
-        print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
+        if self.verbose:
+            print "Export file name format: Folder___<source repository name>___<informatica source folder name).xml"
 
         extract_xml_path = os.path.join(export_xml_folder_path, xml_export_file_name)
         export_folder_command = "pmrep objectexport -f %s -u %s" % (informatica_folder_name, extract_xml_path)
+        if self.verbose:
+            print 'export folder command: %s\n' % export_folder_command
+
         export_result = system.execute_command_line(export_folder_command)
+        if self.verbose:
+            print 'export folder command result:\n%s\n\n' % export_result
 
         # write log
         log_file_name = xml_export_file_name + '.export.log'
         system.write_log(log_file_name, export_result)
+        if self.verbose:
+            print 'log file written: %s' % log_file_name
 
         results_search = "Exported (\d*) object\(s\) - (\d*) Error\(s\), - (\d*) Warning\(s\)"
-        res = re.search(results_search, export_result)
+        parse_result = re.search(results_search, export_result)
 
         if not "objectexport completed successfully." in export_result:
             print "ERROR: Folder export to XML command was unsuccessful!"
             print "Export command used: [%s]" % export_folder_command
-            print "Message returned:\n=========================%s\n=========================\n" % export_result
+            print "Message returned:\n=========================\n%s\n=========================\n" % export_result
             return False
         else:
             print "Export successful!\n"
-            if res:
-                print "Export summary:\n %s\n" % res.group(0)
+            if parse_result:
+                print "Export summary:\n %s\n" % parse_result.group(0)
                 return True
             else:
                 print "ERROR: cannot read export summary!"
@@ -141,11 +221,15 @@ class Pmrep:
         print "----------------------------------------------------------------------------------"
         print "----------------------------------------------------------------------------------"
         print "Exporting %s informatica folders..." % len(informatica_folder_name_list)
+        if self.verbose:
+            print 'folders list: %s\n' % str(informatica_folder_name_list)
 
         for informatica_folder in informatica_folder_name_list:
             export_result = self.export_repository_folder(informatica_folder, export_xml_folder_path)
-            if not export_result: return False
+            if not export_result:
+                return False
 
+        print 'Folders list export done.\n'
         return True
 
 
@@ -162,10 +246,10 @@ class Pmrep:
             return False
 
         folder_name_parse = "Folder___(.+)___(.+)\."
-        res = re.search(folder_name_parse, import_xml_file_path)
-        if res:
-            source_repository_name = res.group(1)
-            source_informatica_folder_name = res.group(2)
+        folder_name_parse_result = re.search(folder_name_parse, import_xml_file_path)
+        if folder_name_parse_result:
+            source_repository_name = folder_name_parse_result.group(1)
+            source_informatica_folder_name = folder_name_parse_result.group(2)
             print "XML file name successfully parsed:\n\tsource repository name: %s\n\tsource folder name: %s\n" % (source_repository_name, source_informatica_folder_name)
         else:
             print "ERROR: XML file name parsing failed!\nPlease note the file name is case-sensitive.\n" \
@@ -244,7 +328,7 @@ class Pmrep:
         system.write_log(log_file_name, import_result)
 
         results_search = "(\d*) Processed, (\d*) Errors, (\d*) Warnings"
-        res = re.search(results_search, import_result)
+        folder_name_parse_result = re.search(results_search, import_result)
 
         if not "objectimport completed successfully." in import_result:
             print "ERROR: Folder import command was unsuccessful!"
@@ -253,8 +337,8 @@ class Pmrep:
             return False
         else:
             print "Import successful!"
-            if res:
-                print "Import summary:\n %s\n" % res.group(0)
+            if folder_name_parse_result:
+                print "Import summary:\n %s\n" % folder_name_parse_result.group(0)
             else:
                 print "ERROR: cannot read import summary! Please analyse the detailed message below:"
                 print "Refer to the log file for details."
@@ -268,7 +352,7 @@ class Pmrep:
         return True
 
 
-    def import_all_xmls_from_folder(self, archive_folder_name, delete_archive_after_successful_import=False):
+    def import_all_xmls_from_folder(self, archive_folder_name, delete_archive_after_successful_import=True):
         print "----------------------------------------------------------------------------------"
         print "----------------------------------------------------------------------------------"
         print "Importing all archive XML files from the folder %s" % archive_folder_name
@@ -279,6 +363,8 @@ class Pmrep:
 
         xml_archives_in_folder = [f for f in os.listdir(archive_folder_name) if os.path.isfile(os.path.join(archive_folder_name,f)) and f.upper().endswith('.XML')]
         print "%s archive files found" % len(xml_archives_in_folder)
+        if self.verbose:
+            print 'archive files:\n%s\n' % str(xml_archives_in_folder)
 
         if len(xml_archives_in_folder) == 0:
             print "ERROR: No xml archive files found in the folder %s." % archive_folder_name
@@ -342,11 +428,8 @@ class Pmrep:
 
         return False
 
-    #export_outcome = infa_connection.export_repository_folders(config.content['folders_to_migrate'], '/home/c51102a/InfaTest/exports')
-    #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
-
-    def export_control(self):
+    def do_export(self):
         return self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
 
-    def import_control(self):
+    def do_import(self):
         return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)

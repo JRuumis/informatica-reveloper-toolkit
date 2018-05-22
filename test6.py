@@ -1,16 +1,8 @@
 from common import configuration
-from version_control import git
-
-
-config = configuration.get_from_json()
-
-
-#validation_result = access_validation.check()  # todo: nesmuki. sho vajadzeetu infa konstruktoraa
-#if not validation_result: exit (1) # exit vajadzeetu validatoraa
-
-#infa_connection = pmrep.Pmrep(config.content) # todo: vienkaarshi config, content resolution jaavuut funkcijaas
-#infa_connection.connect()
-
+#from version_control import git
+import version_control
+#from informatica import pmrep
+import informatica
 
 
 # todo: DONE - import output to log - DONE
@@ -31,19 +23,17 @@ config = configuration.get_from_json()
 # todo: REFACTOR (4 - 12h)
 
 
-git_access = git.Git(config)
+config = configuration.get_from_json()
 
+git = version_control.git.Git(config)
 
-current_branch = git_access.get_current_branch()
+current_branch = git.get_current_branch()
 print 'currently in branch: %s' % current_branch
 
 
+infa = informatica.pmrep.Pmrep(config, git)
+#infa.connect()
 
-
-
-
-#export_outcome = infa_connection.export_control()
-#import_outcome = infa_connection.import_control()
-
-
+export_outcome = infa.do_export()
+import_outcome = infa.do_import()
 

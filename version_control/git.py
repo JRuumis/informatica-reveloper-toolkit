@@ -2,23 +2,26 @@ import re
 import os
 
 # TODO: DONE - finish translating
-# TODO: verbose flag !!!!!!!!!!!!!!
+# TODO: DONE verbose flag !!!!!!!!!!!!!!
 # TODO: command to return an object!!!
 # TODO: all command responses to be collected
 # TODO: sort out merge
 # TODO: add comments
 
-from informatica import system
+from common import system
+
 
 class Git:
     def __init__(self, config, validate=True, verbose=False):
+
+        self.verbose = verbose
+
         try:
             self.git_remote_url = config.content['git']['remote_url']
             self.git_root_folder = os.path.normpath( config.content['git']['repository_root_folder'] )
             self.git_informatica_sub = config.content['git']['informatica_subfolder'].strip('/').strip('\\').strip('\\\\')
             self.git_informatica_root_folder = os.path.normpath( os.path.join(self.git_root_folder, self.git_informatica_sub) )
             self.git_default_branch = config.content['git']['default_branch']
-            self.verbose = verbose
 
         except Exception as err:
             print 'ERROR: Failed to read all required parameters from config.json for git access.'

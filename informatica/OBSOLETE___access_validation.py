@@ -1,9 +1,7 @@
-from informatica import system
-
-
 # todo: move this to informatica class?????
 #
 
+"""
 def check():
 
     print "Validating system configuration for running pmrep..."
@@ -31,6 +29,6 @@ def check():
 
     return True
 
-
+"""
 
 

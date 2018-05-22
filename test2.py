@@ -1,7 +1,6 @@
-
-from informatica import configuration
+from common import configuration
 #from informatica import system
-from informatica import access_validation
+from informatica import OBSOLETE___access_validation
 
 
 
@@ -12,5 +11,5 @@ config = configuration.get_from_json()
 #print "\n\n\n"
 
 
-res = access_validation.check()
+res = OBSOLETE___access_validation.check()
 print res

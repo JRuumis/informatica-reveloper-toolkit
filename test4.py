@@ -1,11 +1,11 @@
-from informatica import configuration
-from informatica import access_validation
+from common import configuration
+from informatica import OBSOLETE___access_validation
 from informatica import pmrep
 
 
 config = configuration.get_from_json()
 
-validation_result = access_validation.check()
+validation_result = OBSOLETE___access_validation.check()
 if not validation_result: exit (1)
 
 
@@ -57,8 +57,8 @@ infa_connection.connect()
 #import_outcome = infa_connection.import_all_xmls_from_folder('/home/c51102a/InfaTest/exports', True)
 
 
-export_outcome = infa_connection.export_control()
-import_outcome = infa_connection.import_control()
+export_outcome = infa_connection.do_export()
+import_outcome = infa_connection.do_import()
 
 
 
