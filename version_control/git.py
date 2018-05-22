@@ -2,7 +2,7 @@
 from informatica import system
 
 class Git:
-    //def __init__(self /*, config*/):
+    #def __init__(self /*, config*/):
 
     def __init__(self):
         print 'asdf'
