@@ -6,12 +6,14 @@ from version_control import git
 
 config = configuration.get_from_json()
 
-validation_result = access_validation.check()  # todo: nesmuki. sho vajadzeetu infa konstruktoraa
-if not validation_result: exit (1) # exit vajadzeetu validatoraa
+
+#validation_result = access_validation.check()  # todo: nesmuki. sho vajadzeetu infa konstruktoraa
+#if not validation_result: exit (1) # exit vajadzeetu validatoraa
+
+#infa_connection = pmrep.Pmrep(config.content) # todo: vienkaarshi config, content resolution jaavuut funkcijaas
+#infa_connection.connect()
 
 
-infa_connection = pmrep.Pmrep(config.content) # todo: vienkaarshi config, content resolution jaavuut funkcijaas
-infa_connection.connect()
 
 # todo: import output to log - DONE
 # todo: export to log - DONE
@@ -31,9 +33,11 @@ infa_connection.connect()
 # todo: REFACTOR (4 - 12h)
 
 
-ggg = git.Git()
+git_access = git.Git(config)
 
-asdf = ggg.validate_environment()
+
+current_branch = git_access.current_branch()
+print 'currently in branch: %s' % current_branch
 
 
 
