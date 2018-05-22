@@ -1,10 +1,10 @@
-from common import config
+from common import configuration
 #from informatica import system
 from informatica import OBSOLETE___access_validation
 
 
 
-config = config.get_from_json()
+config = configuration.get_from_json()
 
 #print config.content
 #print config.content['connections']['EBS_UAT']['domain']

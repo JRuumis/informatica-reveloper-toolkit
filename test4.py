@@ -1,15 +1,15 @@
-from common import config
+from common import configuration
 from informatica import OBSOLETE___access_validation
-from informatica import pmrep
+from informatica import pmrep_control
 
 
-config = config.get_from_json()
+config = configuration.get_from_json()
 
 validation_result = OBSOLETE___access_validation.check()
 if not validation_result: exit (1)
 
 
-infa_connection = pmrep.Pmrep(config.content)
+infa_connection = pmrep_control.Pmrep(config.content)
 infa_connection.connect()
 
 #ress = infa_connection.get_objects_list(object_type="folder")

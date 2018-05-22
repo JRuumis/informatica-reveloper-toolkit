@@ -1,8 +1,8 @@
-from common import config
-from version_control import git
+from common import configuration
+from version_control import git_control
 
 
-config = config.get_from_json()
+config = configuration.get_from_json()
 
 
 #validation_result = access_validation.check()  # todo: nesmuki. sho vajadzeetu infa konstruktoraa
@@ -31,7 +31,7 @@ config = config.get_from_json()
 # todo: REFACTOR (4 - 12h)
 
 
-git_access = git.Git(config)
+git_access = git_control.Git(config)
 
 
 current_branch = git_access.get_current_branch()
