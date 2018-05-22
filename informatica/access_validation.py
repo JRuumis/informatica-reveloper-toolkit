@@ -21,10 +21,11 @@ def check():
 
     print "Validating the pmrep command..."
     if not system.check_command_exists("pmrep -version"):
-        print "Command pmrep not found. Please run manually 'pmrep -version' to troubleshoot.\n"\
+        print "ERROR: Command pmrep not found. Please run manually 'pmrep -version' to troubleshoot.\n"\
               "Make sure the required environment variables are set and with correct values.\n" \
               "Make sure the PATH variable is updated with the INFA_HOME bin path."
         return False
+        # exit(1) ?????
     else:
         print "Command pmrep successfully validated.\n"
 

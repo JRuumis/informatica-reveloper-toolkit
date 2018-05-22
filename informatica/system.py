@@ -4,17 +4,18 @@ import os
 
 
 def execute_command_line(cmd):
-    if platform.system() == 'Linux':
+    #if platform.system() == 'Linux':
         command_pipe = Popen("%s" % cmd, stdout=PIPE, stderr=PIPE, shell=True)
         command_return, command_err = command_pipe.communicate()
         return command_return + command_err
-    else:
-        return "ERROR: not working for Windows yet"
+    #else:
+    #    return "ERROR: not working for Windows yet"
 
 
 def check_command_exists(cmd):
     exec_result = execute_command_line(cmd)
-    if exec_result.strip()[-17:] == 'command not found':
+    if exec_result.strip()[-17:] == 'command not found' or \
+            'is not recognized as an internal or external command' in exec_result:
         return False
     else:
         return True

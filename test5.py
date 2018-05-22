@@ -1,6 +1,7 @@
 from informatica import configuration
 from informatica import access_validation
 from informatica import pmrep
+from version_control import git
 
 
 config = configuration.get_from_json()
@@ -16,7 +17,9 @@ infa_connection.connect()
 # todo: export to log - DONE
 # todo: folder to migrate - auto - DONE
 # todo: infa test exports folder - also in config - DONE
+
 # todo: git
+# todo: rm git !!!!!!!!!!!!!
 # todo: infa validation - to informatica class
 # todo: git validation - to git class
 # todo: calling from command line
@@ -27,6 +30,16 @@ infa_connection.connect()
     # todo: delete folder
 # todo: REFACTOR (4 - 12h)
 
-export_outcome = infa_connection.export_control()
-import_outcome = infa_connection.import_control()
+ggg = git.Git
+
+ggg.validate_environment()
+
+
+
+
+
+#export_outcome = infa_connection.export_control()
+#import_outcome = infa_connection.import_control()
+
+
 
