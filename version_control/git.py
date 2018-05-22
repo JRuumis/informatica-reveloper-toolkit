@@ -9,18 +9,18 @@ class Git:
 
     def __init__(self, config, validate=True):
 
-        #try:
+        try:
+            self.git_remote_url = config.content['git']['remote_url']
+            self.git_root_folder = os.path.normpath( config.content['git']['repository_root_folder'] )
+            self.git_informatica_sub = config.content['git']['informatica_subfolder'].strip('/').strip('\\').strip('\\\\')
+            self.git_informatica_root_folder = os.path.normpath( os.path.join(self.git_root_folder, self.git_informatica_sub) )
+            self.git_default_branch = config.content['git']['default_branch']
 
-        self.git_remote_url = config.content['git']['remote_url']
-        self.git_root_folder = os.path.normpath( config.content['git']['repository_root_folder'] )
-        self.git_informatica_sub = config.content['git']['informatica_subfolder'].strip('/').strip('\\').strip('\\\\')
-        self.git_informatica_root_folder = os.path.normpath( os.path.join(self.git_root_folder, self.git_informatica_sub) )
-        self.git_default_branch = config.content['git']['default_branch']
-
-        #except Exception as err:
-        #    print 'ERROR: Failed to read all required parameters from config.json for git access.'
-        #    print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
-        #    exit(1)
+        except Exception as err:
+            print 'ERROR: Failed to read all required parameters from config.json for git access.'
+            print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
+            print 'Use the config.json.template file in this folder as your reference.'
+            exit(1)
 
         if validate:
             result = self.validate_environment()
@@ -91,13 +91,11 @@ class Git:
             print 'Example:\n\t"git": {\n\t\t"repository_root_folder": "/u01/migration/BI/",\n\t\t"informatica_subfolder": "informatica/archives"\n\t}\n'
             return False
 
-        print 'Git repository folders successfully validated.'
+        print 'Git repository folders successfully validated.\n'
 
         # git checks
-        print 'Performing additional git checks...'
-
+        print 'Performing additional git checks...\n'
         print 'Branches (local and remote, current indicated with a *):\n%s\n' % self.all_branches()
-
         print 'Checking remote repository access: %s...' % self.git_remote_url
         remote_response = self.check_remote()
         if 'remote error' in remote_response:
@@ -107,6 +105,8 @@ class Git:
                   '%s\n' \
                   '------------------------------------------------\n' % remote_response
             return False
+        else:
+            print 'Git remote access successfully validated.\n'
 
         return True
 
@@ -121,21 +121,15 @@ class Git:
         """
 
         current_dir = os.getcwd()
-        #print 'Now in: %s' % current_dir
         os.chdir(self.git_root_folder)
-        #print 'Now in: %s' % os.getcwd()
         full_command = 'git %s' % git_command
 
         if echo:    print '\tGit command: %s' % full_command
 
         output = system.execute_command_line(full_command).strip()
-        #output = Popen(full_command, stdout=PIPE, stderr=PIPE).communicate()
-
-        #if output[1]:   print 'git output: %s' % output[1]
-        #if output[2]:   print 'git error: %s' % output[2]
-
-        print 'DEBUG: git command: %s' % full_command
-        print 'DEBUG: git output:\n%s\n' % output
+        if echo:
+            print 'DEBUG: git command: %s' % full_command
+            print 'DEBUG: git output:\n%s\n' % output
 
         os.chdir(current_dir)
         return output
