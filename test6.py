@@ -29,7 +29,7 @@ current_branch = git.get_current_branch()
 print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch
 
 
-infa = pmrep_control.Pmrep(config, git, verbose=True)
+infa = pmrep_control.Pmrep(config, git)
 
 export_outcome = infa.do_export()
 import_outcome = infa.do_import()
