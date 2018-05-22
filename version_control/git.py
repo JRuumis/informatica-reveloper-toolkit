@@ -98,7 +98,7 @@ class Git:
 
         print 'Branches (local and remote, current indicated with a *):\n%s\n' % self.all_branches()
 
-        print 'Checking remote repository access: %s...' %s self.git_remote_url
+        print 'Checking remote repository access: %s...' % self.git_remote_url
         remote_response = self.check_remote()
         if 'remote error' in remote_response:
             print 'ERROR: Cannot access the remote repository.'
