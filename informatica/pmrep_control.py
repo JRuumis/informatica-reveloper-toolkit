@@ -12,22 +12,23 @@ class Pmrep:
         self.verbose = verbose
         self.git_control = git_control
 
-        try:
-            self.connection = config.connection["informatica_connections"][connection_name]
-            self.connection_repository = self.connection["repository"]
-            self.connection_domain = self.connection["domain"]
-            self.connection_login_name = self.connection["login_name"]
-            self.connection_password = self.connection["password"]
-            self.xml_export_folder = config.connection["xml_export_folder"]
-            self.folders_to_migrate = config.connection["folders_to_migrate"]
+        #try:
 
-        except Exception as err:
-            print 'ERROR: Failed to read all required parameters from config.json for informatica pmrep access.'
-            print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
-            print 'Use the config.json.template file in this folder as your reference.\n'
-            if verbose:
-                print 'Exception:\n%s\n' % str(err)
-            exit(1)
+        self.connection = config.connection["informatica_connections"][connection_name]
+        self.connection_repository = self.connection["repository"]
+        self.connection_domain = self.connection["domain"]
+        self.connection_login_name = self.connection["login_name"]
+        self.connection_password = self.connection["password"]
+        self.xml_export_folder = config.connection["xml_export_folder"]
+        self.folders_to_migrate = config.connection["folders_to_migrate"]
+
+        #except Exception as err:
+        #    print 'ERROR: Failed to read all required parameters from config.json for informatica pmrep access.'
+        #    print 'Check the json file format, e.g. are there any missing commas or closing quotes, brackets?'
+        #    print 'Use the config.json.template file in this folder as your reference.\n'
+        #    if verbose:
+        #        print 'Exception:\n%s\n' % str(err)
+        #    exit(1)
 
         if validate:
             result = self.validate_environment()
