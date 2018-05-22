@@ -36,8 +36,9 @@ config = configuration.get_from_json()
 git_access = git.Git(config)
 
 
-current_branch = git_access.current_branch()
+current_branch = git_access.get_current_branch()
 print 'currently in branch: %s' % current_branch
+
 
 
 

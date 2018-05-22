@@ -15,7 +15,6 @@ class get_from_json:
             print "Make sure the file 'condif.json' exists in the current folder or provide full path to the JSON file."
             exit(1)
 
-        # TODO: validate the JSON content
-
-        print 'JSON successfully read.\n'
+        print 'JSON successfully read.'
+        print 'JSON file structure is valid but the content has not yet been validated.\n'
 
