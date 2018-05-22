@@ -1,7 +1,5 @@
-from common import configuration
-#from version_control import git
+import common
 import version_control
-#from informatica import pmrep
 import informatica
 
 
@@ -23,7 +21,7 @@ import informatica
 # todo: REFACTOR (4 - 12h)
 
 
-config = configuration.get_from_json()
+config = common.config.get_from_json()
 
 git = version_control.git.Git(config)
 
@@ -32,7 +30,6 @@ print 'currently in branch: %s' % current_branch
 
 
 infa = informatica.pmrep.Pmrep(config, git)
-#infa.connect()
 
 export_outcome = infa.do_export()
 import_outcome = infa.do_import()

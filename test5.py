@@ -1,8 +1,8 @@
-from common import configuration
+from common import config
 from version_control import git
 
 
-config = configuration.get_from_json()
+config = config.get_from_json()
 
 
 #validation_result = access_validation.check()  # todo: nesmuki. sho vajadzeetu infa konstruktoraa
