@@ -1,6 +1,6 @@
-from common import configuration
+from common import config
 from version_control import git_control
-from informatica import pmrep_control
+from informatica import pmrep
 
 
 # todo: DONE - import output to log - DONE
@@ -21,15 +21,13 @@ from informatica import pmrep_control
 # todo: REFACTOR (4 - 12h)
 
 
-config = configuration.get_from_json()
-
+config = config.get_from_json()
 git = git_control.Git(config)
 
 current_branch = git.get_current_branch()
 print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch
 
-
-infa = pmrep_control.Pmrep(config, git)
+infa = pmrep.Pmrep(config, git)
 
 export_outcome = infa.do_export()
 import_outcome = infa.do_import()
