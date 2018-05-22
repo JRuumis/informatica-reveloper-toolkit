@@ -10,10 +10,7 @@ class Pmrep:
     def __init__(self, config, git_control, connection_name='default', validate=True, verbose=False, connect=True):
 
         self.verbose = verbose
-
-        # TODO: !!!!!!!!!!!!!!!!!!!!
         self.git_control = git_control
-        #self.git_control = version_control.git.Git(config)
 
         try:
             self.connection = config.connection["informatica_connections"][connection_name]
