@@ -276,7 +276,7 @@ class Pmrep:
 
 
         # create target folder if it does not exist already
-        existing_folders = self.get_repository_folders
+        existing_folders = self.get_repository_folders()
 
         if target_informatica_folder_name in existing_folders:
             print "The target Informatica folder %s already exists in the repository. Current content will be overwritten.\n" % target_informatica_folder_name
