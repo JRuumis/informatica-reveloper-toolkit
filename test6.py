@@ -26,7 +26,7 @@ config = config.get_from_json()
 git = git.Git(config)
 
 current_branch = git.get_current_branch()
-print 'currently in branch: %s' % current_branch
+print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch
 
 
 infa = pmrep.Pmrep(config, git)
