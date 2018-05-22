@@ -4,7 +4,6 @@ from subprocess import Popen, PIPE
 
 from informatica import system
 
-
 class Git:
     #def __init__(self /*, config*/):
 
@@ -36,7 +35,7 @@ class Git:
 
         git_exists = system.check_command_exists(git_version_check_command)
         if git_exists:
-            print 'Command git successfully validated.'
+            print 'Command git successfully validated.\n'
         else:
             print "ERROR: Command git not found. Please run manually 'git --version' to troubleshoot.\n" \
                   "Make sure git is installed and accessible to the user running this application.\n" \
@@ -48,9 +47,9 @@ class Git:
         res = re.search(results_search, git_version)
 
         if int(res.group(1)) < 2:
-            print 'WARNING: your git version is old. It is recommended to have git version 2.13.x or newer. ' \
-                  'The version you are using is %s.%s.%s. ' \
-                  'Some required functionality may not work with your version.' % (res.group(1), res.group(2), res.group(3))
+            print 'WARNING: your git version is old. It is recommended to have git version 2.13.x or newer.\n' \
+                  'The version you are using is %s.%s.%s.\n' \
+                  'Some required functionality may not work with your version.\n' % (res.group(1), res.group(2), res.group(3))
 
         # git repository folder check
         print 'Validating git repository folders...'
@@ -68,10 +67,10 @@ class Git:
             print 'Make sure the git.informatica_subfolder value in json is a sub-path and not absolute path.'
             return False
 
-        print 'Git repository folders successfully validated.'
+        print 'Git repository folders successfully validated.\n'
 
         # git repo check
-        print 'Validating git repository under git repository root folder %s...' % self.git_root_folder
+        print 'Validating git repository under git repository root folder...'
 
         inside_work_tree = self.execute_command('rev-parse --is-inside-work-tree')
         if not inside_work_tree == 'true':
@@ -129,10 +128,13 @@ class Git:
 
         if echo:    print '\tGit command: %s' % full_command
 
-        output = Popen(full_command , stdout=PIPE, stderr=PIPE).communicate()
+        output = system.execute_command_line(full_command)
+        #output = Popen(full_command, stdout=PIPE, stderr=PIPE).communicate()
 
-        if output[1]:   print 'git output: %s' % output[1]
-        if output[2]:   print 'git error: %s' % output[2]
+        #if output[1]:   print 'git output: %s' % output[1]
+        #if output[2]:   print 'git error: %s' % output[2]
+
+        print 'DEBUGGGGGG git output:\n%s\n' % output
 
         os.chdir(current_dir)
         return output
