@@ -263,6 +263,7 @@ class Pmrep:
             print "ERROR: Cannot find the control definition file 'impcntl.dtd' in path $INFA_HOME/server/bin/imcntl.dtd (%s)" % impcntl_dtd_path
             return False
 
+        # TODO: add this to validation and create a class attribute!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if not os.path.isfile("import_control_template.ctl"):
             print "ERROR: Cannot find file import_control_template.ctl in the current folder. Make sure you run the import from the Informatica Developer Toolkit home folder and that the template file is there."
             return False
@@ -427,8 +428,31 @@ class Pmrep:
 
         return False
 
-    def do_export(self):
-        return self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
 
-    def do_import(self):
+    # bool attribute: use_git
+    # take folder from either export or git.infa_root_folder
+    def do_export(self, use_git=True):
+
+        if use_git:
+            self.git_control.checkout(self.git_control.git_default_branch)
+            self.git_control.pull_branch(self.git_control.git_default_branch)
+
+        export_result = self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
+
+        if use_git:
+            self.git_control.commit_all('Rittman Mead informatica developer toolkit migration')
+            self.git_control.push(self.git_control.git_default_branch)
+
+        return export_result
+
+
+
+    def do_import(self, use_git=True):
+
+        if use_git:
+            self.git_control.checkout(self.git_control.git_default_branch)
+            self.git_control.pull_branch(self.git_control.git_default_branch)
+
         return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)
+
+

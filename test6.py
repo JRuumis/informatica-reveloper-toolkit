@@ -20,6 +20,8 @@ from informatica import pmrep
     # todo: delete folder
 # todo: REFACTOR (4 - 12h)
 
+# TODO: delete archive ONLY if 0 errors returned in summary!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 config = config.get_from_json()
 git = git_control.Git(config)
