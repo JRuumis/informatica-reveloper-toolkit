@@ -33,7 +33,7 @@ from informatica import pmrep
 
 
 config = config.get_from_json()
-git = git_control.Git(config, verbose=True)
+git = git_control.Git(config, verbose=False)
 
 current_branch = git.get_current_branch()
 print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch

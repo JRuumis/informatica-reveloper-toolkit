@@ -33,5 +33,8 @@ git = git_control.Git(config, verbose=param_verbose)
 
 infa = pmrep.Pmrep(config, git=git, verbose=param_verbose)
 
-export_outcome = infa.do_export(use_git=True)
-import_outcome = infa.do_import(use_git=True)
+if param_migration_mode = 'export':
+    export_outcome = infa.do_export(use_git=True)
+elif param_migration_mode = 'import':
+    import_outcome = infa.do_import(use_git=True)
+
