@@ -453,6 +453,6 @@ class Pmrep:
             self.git_control.checkout(self.git_control.git_default_branch)
             self.git_control.pull_branch(self.git_control.git_default_branch)
 
-        return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=True)
+        return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=False)
 
 
