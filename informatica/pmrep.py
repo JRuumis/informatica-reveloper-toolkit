@@ -1,9 +1,7 @@
 from common import system
-import version_control
 
 import re
 import os
-
 
 
 class Pmrep:

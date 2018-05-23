@@ -7,24 +7,33 @@ from informatica import pmrep
 # todo: DONE - export to log - DONE
 # todo: DONE - folder to migrate - auto - DONE
 # todo: DONE - infa test exports folder - also in config - DONE
-
-# todo: git
-# todo: code ---> to rm git !!!!!!!!!!!!!
-# todo: infa validation - to informatica class
+# todo: DONE git
+# todo: DONE infa validation - to informatica class
 # todo: DONE - git validation - to git class
-# todo: calling from command line
-    # todo: export (git)
-    # todo: import, (git)
-    # todo: duplicate folder with different name
-    # todo: create folder
-    # todo: delete folder
-# todo: REFACTOR (4 - 12h)
 
+# todo: code ---> to rm git !!!!!!!!!!!!!
+# todo: calling from command line
+    # todo: DONE export (git)
+    # todo: DONE import, (git)
+    # todo: DONE duplicate folder with different name
+    # todo: DONE create folder
+    # todo: delete folder
+
+# todo: REFACTOR (4 - 12h)
 # TODO: delete archive ONLY if 0 errors returned in summary!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# TODO: make infa and git work together - should be quick and easy now (fingers crossed)
+# TODO: create front-end interface - one_python_control_module.py --that-accepts-different-commands-as-keys --to-tell-it-what-to-do <--- implementation + testing should be no more than 1-2h
+# TODO: refactor
+# TODO: create documentation, discuss with Experian
+# TODO: refactor more and code review with Mark Cann, Mark Reedman
+# TODO: deploy on environments
+# TODO: acceptance testing with Experian
+
 
 
 config = config.get_from_json()
-git = git_control.Git(config)
+git = git_control.Git(config, verbose=True)
 
 current_branch = git.get_current_branch()
 print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch

@@ -1,0 +1,37 @@
+from common import config
+from version_control import git_control
+from informatica import pmrep
+import sys
+
+from argparse import ArgumentParser
+
+
+parser = ArgumentParser(description="Rittman Mead Informatica Migration Script")
+parser.add_argument('migration_mode', choices=['export','import'], help="Informatica migration mode.")
+parser.add_argument('-c', '--config_json', action="store", default='config.json', help="Config JSON file to be used. Default: 'config.json'")
+parser.add_argument('-v', '--verbose', action="store", default=False, help="Instruction to run migration in verbose mode - giving much more information about the migration process.")
+
+args = parser.parse_args()
+
+try:
+    # Parse config parameters
+    param_migration_mode = args.migration_mode
+    param_config_json = args.config_json
+    param_verbose = args.verbose
+
+except Exception as err:
+    print '\n\nException caught:\n\n%s ' % err
+    print '\n\tError: Failed to get command line arguments. Exiting.'
+    sys.exit(1)
+
+
+config = config.get_from_json(config_json=param_config_json)
+git = git_control.Git(config, verbose=param_verbose)
+
+#current_branch = git.get_current_branch()
+#print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch
+
+infa = pmrep.Pmrep(config, git=git, verbose=param_verbose)
+
+export_outcome = infa.do_export(use_git=True)
+import_outcome = infa.do_import(use_git=True)
