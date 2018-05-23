@@ -434,12 +434,17 @@ class Pmrep:
     def do_export(self, use_git=True):
 
         print 'Checkout and pull the git repository...'
+
         if use_git:
             self.git_control.checkout(self.git_control.git_default_branch)
             self.git_control.pull_branch(self.git_control.git_default_branch)
+            source_folder = self.git_control.git_informatica_root_folder
+        else:
+            source_folder = self.xml_export_folder
+
         print 'Git repository up to date.'
 
-        export_result = self.export_repository_folders(self.folders_to_migrate, self.xml_export_folder)
+        export_result = self.export_repository_folders(self.folders_to_migrate, source_folder)
 
         print 'Commit and push changes to Git remote repository...'
         if use_git:
@@ -454,11 +459,16 @@ class Pmrep:
     def do_import(self, use_git=True):
 
         print 'Checkout and pull the git repository...'
+
         if use_git:
             self.git_control.checkout(self.git_control.git_default_branch)
             self.git_control.pull_branch(self.git_control.git_default_branch)
+            source_folder = self.git_control.git_informatica_root_folder
+        else:
+            source_folder = self.xml_export_folder
+
         print 'Git repository up to date.'
 
-        return self.import_all_xmls_from_folder(self.xml_export_folder, delete_archive_after_successful_import=False)
+        return self.import_all_xmls_from_folder(source_folder, delete_archive_after_successful_import=False)
 
 
