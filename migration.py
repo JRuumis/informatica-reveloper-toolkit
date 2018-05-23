@@ -28,10 +28,8 @@ except Exception as err:
 config = config.get_from_json(config_json=param_config_json)
 git = git_control.Git(config, verbose=param_verbose)
 
-#current_branch = git.get_current_branch()
-#print '===== TESTING: currently in branch: %s =====\n\n\n' % current_branch
 
-infa = pmrep.Pmrep(config, git=git, verbose=param_verbose)
+infa = pmrep.Pmrep(config, git_control=git, verbose=param_verbose)
 
 if param_migration_mode == 'export':
     export_outcome = infa.do_export(use_git=True)
