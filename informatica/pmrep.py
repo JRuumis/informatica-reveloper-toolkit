@@ -337,6 +337,7 @@ class Pmrep:
             print "Import successful!"
             if folder_name_parse_result:
                 print "Import summary:\n %s\n" % folder_name_parse_result.group(0)
+                # TODO: if there are errors, report failure!
             else:
                 print "ERROR: cannot read import summary! Please analyse the detailed message below:"
                 print "Refer to the log file for details."
