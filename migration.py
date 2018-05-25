@@ -19,7 +19,7 @@ try:
     param_migration_mode = args.migration_mode
     param_config_json = args.config_json
     param_verbose = args.verbose
-    param_use_git = not args.use_git
+    param_use_git = not args.no_git
 
     print 'git: %s' % str(param_use_git)
 
