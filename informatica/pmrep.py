@@ -432,24 +432,22 @@ class Pmrep:
     # take folder from either export or git.infa_root_folder
     def do_export(self, use_git=True):
 
-        print 'Checkout and pull the git repository...'
-
         if use_git:
+            print 'Checkout and pull the git repository...'
             self.git_control.checkout(self.git_control.git_default_branch)
             self.git_control.pull_branch(self.git_control.git_default_branch)
             source_folder = self.git_control.git_informatica_root_folder
+            print 'Git repository up to date.'
         else:
             source_folder = self.xml_export_folder
 
-        print 'Git repository up to date.'
-
         export_result = self.export_repository_folders(self.folders_to_migrate, source_folder)
 
-        print 'Commit and push changes to Git remote repository...'
         if use_git:
+            print 'Commit and push changes to Git remote repository...'
             self.git_control.commit_all('Rittman Mead informatica developer toolkit migration')
             self.git_control.push(self.git_control.git_default_branch)
-        print 'Changes pushed to remote repository.'
+            print 'Changes pushed to remote repository.'
 
         return export_result
 
@@ -457,16 +455,14 @@ class Pmrep:
 
     def do_import(self, use_git=True):
 
-        print 'Checkout and pull the git repository...'
-
         if use_git:
+            print 'Checkout and pull the git repository...'
             self.git_control.checkout(self.git_control.git_default_branch)
             self.git_control.pull_branch(self.git_control.git_default_branch)
             source_folder = self.git_control.git_informatica_root_folder
+            print 'Git repository up to date.'
         else:
             source_folder = self.xml_export_folder
-
-        print 'Git repository up to date.'
 
         return self.import_all_xmls_from_folder(source_folder, delete_archive_after_successful_import=False)
 
