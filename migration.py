@@ -29,7 +29,12 @@ except Exception as err:
     sys.exit(1)
 
 config = config.get_from_json(config_json=param_config_json)
-git = git_control.Git(config, verbose=param_verbose)
+
+if param_use_git:
+    git = git_control.Git(config, verbose=param_verbose)
+else:
+    git = None
+
 infa = pmrep.Pmrep(config, git_control=git, verbose=param_verbose)
 
 if param_migration_mode == 'export':
