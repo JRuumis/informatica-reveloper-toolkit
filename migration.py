@@ -21,8 +21,6 @@ try:
     param_verbose = args.verbose
     param_use_git = not args.no_git
 
-    print 'git: %s' % str(param_use_git)
-
 except Exception as err:
     print '\n\nException caught:\n\n%s ' % err
     print '\n\tError: Failed to get command line arguments. Exiting.'
