@@ -10,7 +10,7 @@ parser = ArgumentParser(description="Rittman Mead Informatica Migration Script")
 parser.add_argument('migration_mode', choices=['export','import'], help="Informatica migration mode.")
 parser.add_argument('-c', '--config_json', action="store", default='config.json', help="Config JSON file to be used. Default: 'config.json'")
 parser.add_argument('-v', '--verbose', action="store", default=False, help="Instruction to run migration in verbose mode - giving much more information about the migration process.")
-parser.add_argument('-g', '--no_git', action="store_false", default=False, help="Skip version control.")
+parser.add_argument('-g', '--no_git', action="store_true", default=False, help="Skip version control.")
 
 args = parser.parse_args()
 
